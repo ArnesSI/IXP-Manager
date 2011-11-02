@@ -269,7 +269,14 @@ class INEX_Controller_Action extends Zend_Controller_Action
     public function getSMS()
     {
         if( $this->_sms === null ) {
-            $this->_sms = new INEX_SMS_Clickatell( $this->config[ 'sms' ][ 'clickatell' ][ 'username' ], $this->config[ 'sms' ][ 'clickatell' ][ 'password' ], $this->config[ 'sms' ][ 'clickatell' ][ 'api_id' ], $this->config[ 'sms' ][ 'clickatell' ][ 'sender_id' ] );
+            $sms_api = $this->config[ 'sms' ][ 'api'] || 'clickatell';
+            $sms_class = $this->config[ 'sms' ][ 'apiclass'] || 'INEX_SMS_Clickatell';
+            $this->_sms = new $sms_class(
+                $this->config[ 'sms' ][ $sms_api ][ 'username' ],
+                $this->config[ 'sms' ][ $sms_api ][ 'password' ],
+                $this->config[ 'sms' ][ $sms_api ][ 'api_id' ],
+                $this->config[ 'sms' ][ $sms_api ][ 'sender_id' ]
+            );
         }
         
         return $this->_sms;

@@ -66,7 +66,7 @@ class SecController extends Zend_Controller_Action
     /**
      * Clickatell object
      */
-    private $_clickatell = null;
+    private $_sms = null;
 
     /**
      * Override the Zend_Controller_Action's constructor (which is called
@@ -241,7 +241,7 @@ class SecController extends Zend_Controller_Action
                 // Send SMS to Operators!
                 foreach( $this->_config['sec']['pagers'] as $pager )
                 {
-                    $this->_getClickatell()->send( $pager,
+                    $this->_getSMS()->send( $pager,
                         "CORE PORT {$this->_session->switch['name']} {$this->_session->port} " . strtoupper( $this->_session->state )
                     );
                 }
@@ -370,20 +370,23 @@ class SecController extends Zend_Controller_Action
     }
 
     /**
-     * Get a Clicktell object to send SMS'
+     * Get an SMS object to send SMS'
      *
-     * @return INEX_SMS_Clickatell The Clickatell object
+     * @return INEX_SMS_Clickatell|Arnes_SMS_Arnes The SMS object
      */
-    private function _getClickatell()
+    private function _getSMS()
     {
-        if( $this->_clickatell === null )
-            $this->_clickatell = new INEX_SMS_Clickatell(
-                $this->_config['sms']['clickatell']['username'],
-                $this->_config['sms']['clickatell']['password'],
-                $this->_config['sms']['clickatell']['api_id']
+        if( $this->_sms === null )
+            $sms_api = $this->_config['sms']['api'];
+            $sms_class = $this->_config['sms']['apiclass'];
+
+            $this->_sms = new $sms_class(
+                $this->_config['sms'][$sms_api]['username'],
+                $this->_config['sms'][$sms_api]['password'],
+                $this->_config['sms'][$sms_api]['api_id']
             );
 
-        return $this->_clickatell;
+        return $this->_sms;
     }
 }
 

@@ -117,6 +117,13 @@ identity.ixp.url = "https://www.example.com/ixp/"
 identity.ixp.logo = APPLICATION_PATH "/../public/images/mylogo.jpg
 
 
+; SMS API to use and settings for each. Valid values: clickatell, arnes
+sms.api = "clickatell"
+; Class name of SMS API in use. Valid values: INEX_SMS_Clickatell, Arnes_SMS_Arnes
+sms.apiclass = "INEX_SMS_Clickatell"
+; Settings for each SMS API
+sms.arnes.username = "user"
+sms.arnes.password = "pass"
 sms.clickatell.username = "user"
 sms.clickatell.password = "pass"
 sms.clickatell.api_id = "appid"

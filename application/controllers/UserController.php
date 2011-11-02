@@ -149,17 +149,32 @@ class UserController extends INEX_Controller_FrontEnd
             if( $this->getRequest()->getParam( 'to' ) !== NULL && is_numeric( $this->getRequest()->getParam( 'to' ) ) && $this->getRequest()->getParam( 'message' ) !== NULL && strlen( $this->getRequest()->getParam( 'message' ) ) > 5 )
             {
 
-                $sms = new INEX_SMS_Clickatell(
-                        $options['sms']['clickatell']['username'],
-                        $options['sms']['clickatell']['password'],
-                        $options['sms']['clickatell']['api_id'],
-                        $options['sms']['clickatell']['sender_id']
+                $sms_api = $options['sms']['api'];
+                $sms_class = $options['sms']['apiclass'];
+                $sms = new $sms_class(
+                        $options['sms'][$sms_api]['username'],
+                        $options['sms'][$sms_api]['password'],
+                        $options['sms'][$sms_api]['api_id'],
+                        $options['sms'][$sms_api]['sender_id']
                 );
 
                 if( $sms->send( $this->getRequest()->getParam( 'to' ), stripslashes( $this->getRequest()->getParam( 'message' ) ) ) )
+                {
+                    $this->logger->notice(
+                        "User {$this->user['username']} successfully sent SMS ".
+                        "to {$this->getRequest()->getParam( 'to' )}"
+                    );
                     echo "1:SMS successfully sent ({$sms->apiResponse})";
+                }
                 else
+                {
+                    $this->logger->warn(
+                        "User {$this->user['username']} failed to send SMS ".
+                        "to {$this->getRequest()->getParam( 'to' )}. ".
+                        "Reason: ".$sms->apiResponse
+                    );
                     echo "0:{$sms->apiResponse}";
+                }
             }
             else {
                 echo '0:Err:One or more of your submitted parameters were incorrect.';
