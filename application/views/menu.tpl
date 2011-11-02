@@ -195,6 +195,7 @@
                             null, 'Route Servers'
                         ]
                     ],
+                    _cmSplit,
                 {/if}
                 {if $identity.user.privs eq 3}
                     [null,'Statistics','{genUrl controller="customer" action="statistics-overview"}',null,'Statistics',
@@ -260,7 +261,9 @@
                 {if $identity.user.privs neq 1}
                     [null,'Profile','{genUrl controller="profile"}',null,'Profile'],
                 {else}
-                    [null,'Profile','{genUrl controller="profile"}',null,'Profile',
+                    [null,'Profile',null,null,'Profile',
+                        ['<img src="{genUrl}/images/joomla-admin/menu/personal.png" />', 'User Profile', '{genUrl controller="profile"}', 
+                            null, 'User Profile' ],
                         ['<img src="{genUrl}/images/joomla-admin/menu/controlpanel.png" />', 'SEC Event Notifications',  '{genUrl controller="dashboard" action="sec-event-email-config"}',
                             null, 'SEC Event Notifications'   ]
                     ],
