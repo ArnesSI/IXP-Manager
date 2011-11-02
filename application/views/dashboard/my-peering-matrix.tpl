@@ -70,16 +70,16 @@
         <td>
             <a href="#s{$m.Y_Cust.id}" onClick="changeMyPeeredState( '{$m.Y_Cust.id}', {$vlan} ); return false;">
                 <div id="myPeeredState-{$m.Y_Cust.id}">
-                    {if $m.MyPeeringMatrix.peered eq 'YES'}
+                    {if $m.MyPeeringMatrix.0.peered eq 'YES'}
 		                <img src="{genUrl}/images/22x22/yes.png" alt="YES" title="Peered"
 		                    width="22" height="22" border="0" />
-		            {elseif $m.MyPeeringMatrix.peered eq 'NO'}
+		            {elseif $m.MyPeeringMatrix.0.peered eq 'NO'}
 		                <img src="{genUrl}/images/22x22/no.png" alt="NO" title="Not peered"
 		                    width="22" height="22" border="0" />
-		            {elseif $m.MyPeeringMatrix.peered eq 'WAITING'}
+		            {elseif $m.MyPeeringMatrix.0.peered eq 'WAITING'}
 		                <img src="{genUrl}/images/22x22/waiting.png" alt="Waiting"
 		                    title="WAITING" width="22" height="22" border="0" />
-		            {elseif $m.MyPeeringMatrix.peered eq 'NEVER'}
+		            {elseif $m.MyPeeringMatrix.0.peered eq 'NEVER'}
 		                <img src="{genUrl}/images/22x22/never.png" alt="Never"
 		                    title="NEVER" width="22" height="22" border="0" />
 		            {/if}
@@ -398,22 +398,22 @@ function changeMyPeeredState( pId, pVlan )
                 {
                     case 0:
                         $('#myPeeredState-' + pId).append(
-                            '<img src="{/literal}{genUrl}{literal}/images/22x22/no.png" width="22" height="22" border="0" alt="NO" />'
+                            '<img src="{/literal}{genUrl}{literal}/images/22x22/no.png" width="22" height="22" border="0" alt="NO" title="Not peered" />'
                         );
                         break;
                     case 1:
                         $('#myPeeredState-' + pId).append(
-                            '<img src="{/literal}{genUrl}{literal}/images/22x22/yes.png" width="22" height="22" border="0" alt="YES" />'
+                            '<img src="{/literal}{genUrl}{literal}/images/22x22/yes.png" width="22" height="22" border="0" alt="YES" title="Peered" />'
                         );
                         break;
                     case 2:
                         $('#myPeeredState-' + pId).append(
-                            '<img src="{/literal}{genUrl}{literal}/images/22x22/waiting.png" width="22" height="22" border="0" alt="WAITING" />'
+                            '<img src="{/literal}{genUrl}{literal}/images/22x22/waiting.png" width="22" height="22" border="0" alt="WAITING" title="Waiting" />'
                         );
                         break;
                     case 3:
                         $('#myPeeredState-' + pId).append(
-                            '<img src="{/literal}{genUrl}{literal}/images/22x22/never.png" width="22" height="22" border="0" alt="NEVER" />'
+                            '<img src="{/literal}{genUrl}{literal}/images/22x22/never.png" width="22" height="22" border="0" alt="NEVER" title="Never" />'
                         );
                         break;
                 }
