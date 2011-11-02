@@ -663,6 +663,7 @@ CREATE TABLE `vlaninterface` (
   `ipv6enabled` tinyint(4) DEFAULT NULL,
   `ipv6addressid` int(10) unsigned DEFAULT NULL,
   `ipv6hostname` varchar(64) NOT NULL DEFAULT '',
+  `irrdbfilter` tinyint(4) DEFAULT 1,
   `mcastenabled` tinyint(4) DEFAULT NULL,
   `bgpmd5secret` varchar(64) DEFAULT NULL,
   `ipv4bgpmd5secret` varchar(64) DEFAULT NULL,
