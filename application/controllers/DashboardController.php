@@ -173,6 +173,7 @@ class DashboardController extends INEX_Controller_Action
             ->leftJoin( 'vca.ViewSwitchDetailsByCustid vsd' )
             ->leftJoin( 'vsd.ViewVlaninterfaceDetailsByCustid vvid' )
             ->whereIn( 'vca.type', array( Cust::TYPE_FULL, Cust::TYPE_INTERNAL, Cust::TYPE_PROBONO ) )
+            ->andWhere( 'vsd.status IS NOT NULL' )
             ->groupBy( 'vvid.virtualinterfaceid' )
             ->orderBy( 'name' );
 
