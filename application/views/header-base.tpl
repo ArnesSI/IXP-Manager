@@ -66,9 +66,6 @@
     <script type="text/javascript" src="{genUrl}/css/yui/build/editor/simpleeditor-min.js"></script>
     <script type="text/javascript" src="{genUrl}/css/yui/build/tabview/tabview-min.js"></script>
 
-    <script type="text/javascript" src="{genUrl}/js/JSCookMenu_mini.js"></script>
-    <script type="text/javascript" src="{genUrl}/js/theme.js"></script>
-
     <script type="text/javascript" src="{genUrl}/js/php.js"></script>
 
     {if $hasIdentity and $action neq 'my-peering-matrix'}
