@@ -438,6 +438,10 @@ table.adminheading th.VLAN {
     background: url(../images/joomla-admin/vlan.png) no-repeat left;
 }
 
+table.adminheading th.Networkinfo {
+    background: url(../images/joomla-admin/network.png) no-repeat left;
+}
+
 table.adminheading th.Statistics {
     background: url(../images/joomla-admin/ksysguard.png) no-repeat left;
 }

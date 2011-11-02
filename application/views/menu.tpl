@@ -66,7 +66,9 @@
                     ['<img src="{genUrl}/images/joomla-admin/menu/console.png" />',    'Console Connections',  '{genUrl controller="console-server-connection"}',
                                     null,'Console Connections'   ],
                     ['<img src="{genUrl}/images/joomla-admin/menu/vlan.png" />',       'VLANs',                '{genUrl controller="vlan"}',
-                                    null, 'VLANs'   ]
+                                    null, 'VLANs'   ],
+                    ['<img src="{genUrl}/images/joomla-admin/menu/network.png" />',    'Network Info',         '{genUrl controller="networkinfo"}',
+                                    null, 'Network Info'   ]
                     ],
                     _cmSplit,
                     [null,'Admin',null,null,'Admin',

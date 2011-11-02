@@ -37,6 +37,14 @@
 class Networkinfo extends BaseNetworkinfo
 {
 
+    const PROTOCOL_IPV4 = 4;
+    const PROTOCOL_IPV6 = 6;
+
+    public static $PROTOCOL_TEXT = array(
+        Networkinfo::PROTOCOL_IPV4 => 'IPv4',
+        Networkinfo::PROTOCOL_IPV6 => 'IPv6',
+    );
+
     public function setUp()
     {
         parent::setUp();
