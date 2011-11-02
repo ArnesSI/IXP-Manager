@@ -92,10 +92,9 @@ class INEX_Form_Switch extends INEX_Form
         $this->addElement( $cabinet );
 
 
-        $infrastructre = $this->createElement( 'text', 'infrastructure' );
+        $infrastructre = $this->createElement( 'checkbox', 'infrastructure' );
         $infrastructre->setLabel( 'Infrastructure' )
-            ->addFilter( 'StringTrim' )
-            ->addFilter( new INEX_Filter_StripSlashes() );
+            ->setCheckedValue( '1' );
 
         $this->addElement( $infrastructre );
 
