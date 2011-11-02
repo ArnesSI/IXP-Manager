@@ -42,7 +42,7 @@ class CabinetController extends INEX_Controller_FrontEnd
 
             'displayColumns' => array( 'id', 'name', 'cololocation', 'height', 'type', 'location' ),
 
-            'viewPanelRows'  => array( 'name', 'cololocation', 'height', 'type', 'location' ),
+            'viewPanelRows'  => array( 'name', 'cololocation', 'height', 'type', 'location', 'notes' ),
             'viewPanelTitle' => 'name',
 
             'sortDefaults' => array(
@@ -82,6 +82,10 @@ class CabinetController extends INEX_Controller_FrontEnd
                 'field' => 'name',
                 'label' => 'Location',
                 'sortable' => true
+            ),
+
+            'notes' => array(
+                'label' => 'Notes',
             )
         );
 

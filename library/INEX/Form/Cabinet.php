@@ -99,13 +99,13 @@ class INEX_Form_Cabinet extends INEX_Form
         $this->addElement( $cololocation );
 
         $type = $this->createElement( 'text', 'type' );
-        $type->addValidator( 'type', false, array( 1, 255 ) )
-        ->setRequired( true )
+        $type->addValidator( 'stringLength', false, array( 1, 255 ) )
+        ->setRequired( false )
         ->setLabel( 'Type' )
         ->addFilter( 'StringTrim' )
         ->addFilter( new INEX_Filter_StripSlashes() );
 
-        $this->addElement( $cololocation );
+        $this->addElement( $type );
 
         $height = $this->createElement( 'text', 'height' );
         $height->addValidator( 'between', false, array( 0, 100 ) )
