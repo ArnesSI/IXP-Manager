@@ -66,6 +66,20 @@
 
     YAHOO.util.Event.onDOMReady( YAHOO.IXP.initViewPanel );
 
+    cellLinks = [];
+    YAHOO.IXP.addEventsToCellLinks = function() {ldelim}
+        cellLinks.forEach(function(cell) {ldelim}
+            YAHOO.util.Event.addListener(
+                cell.el,
+                'click',
+                YAHOO.IXP.showViewPanel, {ldelim}
+                    controller: cell.controller,
+                    id: cell.id
+                {rdelim}
+            );
+        {rdelim});
+    {rdelim}
+
 </script>
 
 <div class="yui-g" style="height: 600px">
@@ -114,19 +128,15 @@
                     <td>
                         {if $row->$model->$field neq ''}
                         <span id="viewPanel-{$frontend.columns.$col.controller}-{$row->$model->id}-{$idcount}" class="blueLink">
-                            <script>
-                                YAHOO.namespace( 'IXP' );
-                                YAHOO.util.Event.addListener(
-                                    'viewPanel-{$frontend.columns.$col.controller}-{$row->$model->id}-{$idcount}',
-                                    'click',
-                                    YAHOO.IXP.showViewPanel, {ldelim}
-                                            controller: '{$frontend.columns.$col.controller}',
-                                            id: {$row->$model->id}
-                                        {rdelim}
-                                    );
-                            </script>
                             {$row->$model->$field}
                         </span>
+                        <script>
+                            cellLinks.push( {ldelim}
+                                el:         'viewPanel-{$frontend.columns.$col.controller}-{$row->$model->id}-{$idcount}',
+                                controller: '{$frontend.columns.$col.controller}',
+                                id:         {$row->$model->id}
+                            {rdelim});
+                        </script>
                         {/if}
                     </td>
                 {elseif $frontend.columns.$col.type eq 'l2HasOne'}
@@ -136,19 +146,15 @@
                     <td>
                         {if $row->$l1model->$l2model->$field neq ''}
                             <span id="viewPanel-{$frontend.columns.$col.l2controller}-{$row->$l1model->$l2model->id}-{$idcount}" class="blueLink">
-                                <script>
-                                    YAHOO.namespace( 'IXP' );
-                                    YAHOO.util.Event.addListener(
-                                        'viewPanel-{$frontend.columns.$col.l2controller}-{$row->$l1model->$l2model->id}-{$idcount}',
-                                        'click',
-                                        YAHOO.IXP.showViewPanel, {ldelim}
-                                                controller: '{$frontend.columns.$col.l2controller}',
-                                                id: {$row->$l1model->$l2model->id}
-                                            {rdelim}
-                                        );
-                                </script>
                                 {$row->$l1model->$l2model->$field}
                             </span>
+                            <script>
+                                cellLinks.push( {ldelim}
+                                    el:         'viewPanel-{$frontend.columns.$col.l2controller}-{$row->$l1model->$l2model->id}-{$idcount}',
+                                    controller: '{$frontend.columns.$col.l2controller}',
+                                    id:         {$row->$l1model->$l2model->id}
+                                {rdelim})
+                            </script>
                         {/if}
                     </td>
                 {elseif $frontend.columns.$col.type eq 'xlate'}
@@ -181,7 +187,8 @@
 </div>
 
 <script>
-YAHOO.util.Event.addListener( window, "load", function() {ldelim}
+YAHOO.util.Event.onDOMReady( function() {ldelim}
+
     YAHOO.IXP.TableGenerator = new function() {ldelim}
 
         var myColumnDefs = [
@@ -285,6 +292,7 @@ YAHOO.util.Event.addListener( window, "load", function() {ldelim}
 
         {/if}
 
+        YAHOO.IXP.addEventsToCellLinks();
 
     {rdelim};
 {rdelim});
