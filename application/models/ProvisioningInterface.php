@@ -89,7 +89,7 @@ class ProvisioningInterface extends BaseProvisioningInterface
             if( $this[$f] )
                 $progress += 1;
 
-        return 'X ' . $progress . "/" . count( $fields );
+        return $progress . "/" . count( $fields );
     }
 
 }

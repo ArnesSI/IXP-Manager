@@ -37,7 +37,7 @@
         <td>{$o.id}</td>
         <td><a href="{genUrl controller="customer" action="edit" id=$o.id}">{$o.Cust.name}</a></td>
         <td><a href="{genUrl controller="user"     action="edit" id=$o.id}">{$o.CreatedBy.username}</a></td>
-        <td>{$o.created_at|strtotime|date_format:"%Y-%m-%d %H:%m:%d"}<td>
+        <td>{$o.created_at|strtotime|date_format:"%Y-%m-%d %H:%m:%d"}</td>
         <td>{$o->stepsComplete()}</td>
     </tr>
     {/foreach}
