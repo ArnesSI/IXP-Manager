@@ -30,17 +30,40 @@ destfilepfx="bird"
 bird_reload_4="/usr/local/sbin/birdc"
 bird_reload_6="/usr/local/sbin/birdc6"
 
-vlan=10
+vlan=270
+reload=0
 routeserver=`grep rs_identity ${ixpconfig} | cut -d= -f2 | awk '{print $1}'`
 
 basename=`basename $0`
 tmpfile=`mktemp /tmp/${basename}.XXXXXXXX`
 
-if [ 'X'$1 = 'Xreload' ]; then
-	reload=1
-else
-	reload=0
-fi
+# process command line options
+while getopts "hv:r" OPTION; do
+	case "$OPTION" in
+		h)
+			cat <<EOF
+Usage: $basename [-v <vlan>] [-r]
+Generate route server configuration for BIRD from IXP-Manager data.
+
+Arguments:
+  -v <vlan>  VLAN ID to generate for
+  -r         Signal BIRD to read newly generated configuration files
+
+EOF
+			exit 0
+			;;
+		v)
+			vlan="$OPTARG"
+			;;
+		r)
+			reload=1
+			;;
+		*)
+			echo "$basename: unrecognized option"
+			exit 1
+			;;
+	esac
+done
 
 for protocol in 4 6; do
 	destfile=${destdir}/${destfilepfx}-rs${routeserver}-vlan${vlan}-ipv${protocol}.conf
@@ -48,7 +71,7 @@ for protocol in 4 6; do
 
 	echo configuring: ${destfile}
 	build-tt-member-configuration.pl	\
-		--vlan 10			\
+		--vlan $vlan			\
 		--protocol ${protocol}		\
 		--routeserver ${routeserver}	\
 		${sourcett}			> ${rstmpfile} 2> ${tmpfile}
@@ -65,7 +88,7 @@ for protocol in 4 6; do
 			mv ${destfile} ${destfile}.old
 			mv ${rstmpfile} ${destfile}
 
-			if [ ${reload} ]; then
+			if [ ${reload} -eq 1 ]; then
 				if [ ${protocol} -eq 4 ]; then
 					${bird_reload_4} configure
 				elif [ ${protocol} -eq 6 ]; then
