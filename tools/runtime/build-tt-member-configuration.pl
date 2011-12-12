@@ -117,7 +117,8 @@ $query .= <<EOF;
 		sw.speed,
 		sw.switch,
 		sw.switchport,
-		sw.locationname
+		sw.locationname,
+		REPLACE(LOWER(sw.locationshortname), '-', '_') AS locationshortname
 	FROM
 		view_cust_current_active cu
 	LEFT JOIN (view_vlaninterface_details_by_custid vli) ON (vli.custid = cu.id)
@@ -160,6 +161,7 @@ $query = <<EOF;
 		cu.autsys,
 		cu.maxprefixes,
 		cu.peeringemail,
+		cu.irrdb,
 		IF(LENGTH(cu.peeringmacro) > 1, cu.peeringmacro, CONCAT('AS', cu.autsys)) AS peeringmacro,
 		COUNT(vli.virtualinterfaceid) AS numports,
 		SUM(vli.ipv6enabled) AS ipv6enabled,
@@ -202,6 +204,20 @@ $vars->{ixp_rs_afilist} = ['ipv4', 'ipv6', 'vpnv4'];
 
 my %hash = %{$vars->{entries}};
 @{$vars->{sortedkeys}} = reverse sort { $hash{$b}->{autsys} <=> $hash{$a}->{autsys} } keys %hash;
+@{$vars->{sortedasns}} = sort keys %{$vars->{asnlist}};
+
+# to asn entries add ids of their virtual interfaces
+my ($asn, $vid);
+foreach $asn (keys %{$vars->{asnlist}}) {
+	if (! defined $vars->{asnlist}->{$asn}->{'virtifacelist'}) {
+		$vars->{asnlist}->{$asn}->{'virtifacelist'} = [];
+	}
+	foreach $vid (keys %{$vars->{entries}}) {
+		if ($asn == $vars->{entries}->{$vid}->{'autsys'}) {
+			push @{$vars->{asnlist}->{$asn}->{'virtifacelist'}}, $vid;
+		}
+	}
+}
 
 if ($routeserver) {
 	if ($protocol && $vlan) {
