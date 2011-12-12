@@ -130,16 +130,19 @@
 
 <hr width="95%"></hr>
 
-<h2>Connection {counter name=numconnections}</h2>
+<h2>Connection {$connection.name}</h2>
 
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Physical interfaces:</h3>
+
+{foreach from=$connection.Physicalinterface item=physicalinterface}
 <table id="myDetailsTable">
 
 <tr>
     <td width="200">Switch:</td>
-    <td width="200" id="value">{$connection.Physicalinterface.0.Switchport.SwitchTable.name}.inex.ie</td>
+    <td width="200" id="value">{$physicalinterface.Switchport.SwitchTable.name}.arnes.si</td>
     <td width="40"></td>
     <td width="200">Switch Port:</td>
-    <td width="200" id="value">{$connection.Physicalinterface.0.Switchport.name}</td>
+    <td width="200" id="value">{$physicalinterface.Switchport.name}</td>
 </tr>
 
 <tr>
@@ -148,10 +151,10 @@
 
 <tr>
     <td>Speed:</td>
-    <td id="value">{$connection.Physicalinterface.0.speed} Mbps</td>
+    <td id="value">{$physicalinterface.speed} Mbps</td>
     <td></td>
     <td>Duplex:</td>
-    <td id="value">{$connection.Physicalinterface.0.duplex}</td>
+    <td id="value">{$physicalinterface.duplex}</td>
 </tr>
 
 <tr>
@@ -160,34 +163,23 @@
 
 <tr>
     <td>Location:</td>
-    <td id="value">{$connection.Physicalinterface.0.Switchport.SwitchTable.Cabinet.Location.name}</td>
+    <td id="value">{$physicalinterface.Switchport.SwitchTable.Cabinet.Location.name}</td>
     <td></td>
     <td>Colo Cabinet ID:</td>
-    <td id="value">{$connection.Physicalinterface.0.Switchport.SwitchTable.Cabinet.name}</td>
+    <td id="value">{$physicalinterface.Switchport.SwitchTable.Cabinet.name}</td>
 </tr>
 
 <tr>
     <td>&nbsp;</td><td></td><td></td><td></td><td></td>
 </tr>
-
-<tr>
-    <td>AS Number:</td>
-    <td id="value">AS{$cust.autsys}</td>
-    <td></td>
-    <td>Peering Macro:</td>
-    <td id="value">{$cust.peeringmacro}</td>
-</tr>
-
-<tr>
-    <td></td><td></td><td></td><td></td><td></td>
-</tr>
+{/foreach}
 
 </table>
 
 {foreach from=$connection.Vlaninterface item=interface}
 {assign var='vlanid' value=$interface.vlanid}
 
-<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$interface.Vlan.name}:</h3>
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$interface.Vlan.name} VLAN interfaces:</h3>
 
 <table id="myDetailsTable">
 
