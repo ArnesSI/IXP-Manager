@@ -40,14 +40,15 @@ Click on a graph below for longer term statistics or change the graph time in th
 </form>
 </p>
 
+{if in_array($category, $categories_aggregate)}
 <h2>Aggregate Traffic Statistics</h2>
 
             <p>
 		<a href="{genUrl controller='dashboard' action='statistics-drilldown' monitorindex='aggregate' category=$category shortname=$shortname}">
-                    {genMrtgImgUrlTag shortname=$shortname category=$category monitorindex='aggregate'}
+                    {genMrtgImgUrlTag shortname=$shortname category=$category monitorindex='aggregate' graphBackend=$graphBackend}
 		</a>
             </p>
-
+{/if}
 
 {foreach from=$connections item=connection}
 
@@ -60,10 +61,9 @@ Click on a graph below for longer term statistics or change the graph time in th
                 / {$pi.Switchport.name} ({$pi.speed}Mb/s)
         </h2>
 
-
         <p>
-            <a href="{genUrl controller='dashboard' action='statistics-drilldown' monitorindex=$pi.monitorindex category=$category shortname=$shortname}">
-                {genMrtgImgUrlTag shortname=$shortname category=$category monitorindex=$pi.monitorindex}
+            <a href="{genUrl controller='dashboard' action='statistics-drilldown' monitorindex=$pi.monitorindex category=$category shortname=$shortname switchport=$pi.Switchport.id}">
+                {genMrtgImgUrlTag shortname=$shortname category=$category monitorindex=$pi.monitorindex switchport=$pi.Switchport.id graphBackend=$graphBackend}
             </a>
         </p>
 

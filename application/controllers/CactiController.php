@@ -67,6 +67,9 @@ class CactiController extends INEX_Controller_Action
             die();
         }
 
+        if( $this->getGraphingClass() != "Arnes_Cacti" )
+            die();
+
         // call the parent's version where all the Zend magic happens
         parent::__construct( $request, $response, $invokeArgs );
     }
@@ -82,12 +85,14 @@ class CactiController extends INEX_Controller_Action
         header( 'Expires: Thu, 01 Jan 1970 00:00:00 GMT' );
 
         $switchport   = $this->getRequest()->getParam( 'switchport', 'aggregate' );
+        $monitorindex = $this->getRequest()->getParam( 'monitorindex', 'aggregate' );
         $period       = $this->getRequest()->getParam( 'period', 'day' );
         $shortname    = $this->getRequest()->getParam( 'shortname' );
         $category     = $this->getRequest()->getParam( 'category', 'bits' );
         $graph        = $this->getRequest()->getParam( 'graph', '' );
+        $graphMini    = $this->getRequest()->getParam( 'mini', 0 );
 
-        $this->logger->debug( "Request for graph: $shortname-$switchport-$category-$period by {$this->user->username}" );
+        $this->logger->debug( "Request for graph: $shortname-$monitorindex-$category-$period-$graph-$switchport by {$this->user->username}" );
         if( !$shortname )
         {
             $this->logger->err( "Missing mandatory parameter shortname" );
@@ -104,23 +109,55 @@ class CactiController extends INEX_Controller_Action
         $interface = null;
         $switchName = null;
         $portName = null;
+        $requestValid = false;
 
+        // generate small (preview) or full size graph
+        if( $graphMini == 1 )
+            $graphMini = true;
+        else
+            $graphMini = false;
+
+        // determine what type of graph was requested
         if( $shortname == 'X_Trunks' )
         {
-            $filename = $this->config['mrtg']['path']
-                . '/../trunks/' . $graph . '-' . $period . '.png';
+            // make sure the graph requested is actually in configuration
+            foreach( $this->config['mrtg']['trunk_graphs'] as $g )
+            {
+                $p = explode( '::', $g );
+                $graphs[] = $p[0];
+            }
+            if( in_array($graph, $graphs) )
+            {
+                $portName = 'X_Trunks';
+                $category = 'bits';
+                $requestValid = true;
+                list( $switchName, $graphTitle ) = explode('_', $graph, 2);
+            }
         }
         else if( $shortname == 'X_SwitchAggregate' )
         {
-            $filename = $this->config['mrtg']['path']
-                . '/../switches/switch-aggregate-' . $graph . '-'
-                . $category . '-' . $period . '.png';
+            // werify the switch exists in DB
+            if( Doctrine::getTable( 'SwitchTable' )->findOneByName($graph) )
+            {
+                $portName   = 'X_SwitchAggregate';
+                $requestValid = true;
+                $switchName = $graph;
+            }
         }
         else if( $shortname == 'X_Peering' )
         {
-            $filename = $this->config['mrtg']['path']
-                . '/../inex_peering-' . $graph . '-'
-                . $category . '-' . $period . '.png';
+            // make sure the graph requested is actually in configuration
+            foreach( $this->config['mrtg']['traffic_graphs'] as $g )
+            {
+                $p = explode( '::', $g );
+                $graphs[]      = $p[0];
+            }
+            if( in_array($graph, $graphs) )
+            {
+                $portName   = 'X_Peering';
+                $requestValid = true;
+                $graphTitle = $graph;
+            }
         }
         else
         {
@@ -131,8 +168,11 @@ class CactiController extends INEX_Controller_Action
             $customer = Doctrine::getTable( 'Cust' )->findOneByShortname($shortname);
             $graphTitle = 'AS'.$customer['autsys'];
 
-            // verify that the interface requested belongs to this customers connection
-            // and set switch name and port name accordingly
+            if( $monitorindex == "aggregate" )
+                $switchport = "aggregate";
+
+            // verify that the interface requested belongs to this customer's connection
+            // and set switch and port name accordingly
             if( $switchport != 'aggregate' && $customer )
             {
                 foreach( $customer->getConnections() as $connection )
@@ -143,18 +183,24 @@ class CactiController extends INEX_Controller_Action
                         {
                             $portName = $interface->Switchport->name;
                             $switchName = $interface->Switchport->SwitchTable->name;
+                            $requestValid = true;
                             break 2;
                         }
                     }
                 }
-                // the correct connection was not found
-                if( is_null($portName) )
-                {
-                    $this->logger->err( "Could not match Cust $shortname to SwitchPort ID $switchport while loading graph" );
-                    $this->_printImageMissing();
-                    exit;
-                }
             }
+            elseif( $switchport == 'aggregate' && $customer )
+                $requestValid = true;
+            else
+                $requestValid = false;
+        }
+
+        // the correct combination of graph parameters was not found
+        if( $requestValid == false )
+        {
+            $this->logger->err( "Invalid combination of graph request parameters: $shortname-$monitorindex-$category-$period-$graph-$switchport" );
+            $this->_printImageMissing();
+            exit;
         }
 
         /* output of this function is expected to be an image
@@ -162,14 +208,13 @@ class CactiController extends INEX_Controller_Action
          */
         try
         {
-            // FIXME put these in configuration file
-            $cacti_url = 'http://<host>/cacti/soap_service.php';
-            $cacti_user = 'ixp_manager';
-            $cacti_pass = '<password>';
-            $cacti = new Arnes_Cacti($cacti_url, $cacti_user, $cacti_pass);
+            $cacti_path = $this->config['cacti']['path'];
+            $cacti_user = $this->config['cacti']['user'];
+            $cacti_pass = $this->config['cacti']['pass'];
+            $cacti = new Arnes_Cacti($cacti_path, $cacti_user, $cacti_pass);
             $id = $cacti->findGraph($graphTitle, $switchName, $portName, $category);
             $this->logger->debug("Getting graph id: $id from Cacti");
-            $data = $cacti->getGraph($id, $period);
+            $data = $cacti->getGraph($id, $period, $graphMini);
         }
         catch(Exception $e) {
             $this->logger->err( "Could not load graph $shortname-$switchport-$category-$period from Cacti" );
@@ -177,7 +222,7 @@ class CactiController extends INEX_Controller_Action
             $this->_printImageMissing();
             exit;
         }
-        
+
         echo $data;
         // to prevent sending any footer html
         exit;

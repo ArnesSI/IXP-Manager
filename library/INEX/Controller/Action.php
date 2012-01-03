@@ -276,6 +276,23 @@ class INEX_Controller_Action extends Zend_Controller_Action
     }
 
     /**
+     * Utility function to to return class name of graphing backend
+     * based on configuration.
+     *
+     * @return string Name of graphing class.
+     */
+    public function getGraphingClass()
+    {
+        switch( $this->config[ 'graph' ][ 'backend' ] )
+        {
+            case( "mrtg" ):
+                return "INEX_Mrtg";
+            case( "cacti" ):
+                return "Arnes_Cacti";
+        }
+    }
+
+    /**
      * Get the user object
      *
      * @return User The user object

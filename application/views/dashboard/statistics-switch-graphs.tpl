@@ -54,6 +54,7 @@
             category=$category
             values=$stats.$pvalue
             graph=$switches.$switch.name
+            graphBackend=$graphBackend
     }
 </p>
 

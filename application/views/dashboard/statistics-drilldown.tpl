@@ -23,7 +23,7 @@
 {/if}
 
 <p>
-<form action="{genUrl controller="dashboard" action="statistics-drilldown" shortname=$shortname monitorindex=$monitorindex}" method="post">
+<form action="{genUrl controller="dashboard" action="statistics-drilldown" shortname=$shortname monitorindex=$monitorindex switchport=$portid}" method="post">
 <table>
 <tr>
     <td width="20"></td>
@@ -51,6 +51,8 @@
             monitorindex=$monitorindex
             period=$pvalue
             values=$stats.$pvalue
+            switchport=$portid
+            graphBackend=$graphBackend
     }
 </p>
 

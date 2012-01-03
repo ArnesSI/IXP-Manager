@@ -126,6 +126,10 @@ sms.clickatell.api_id = "appid"
 sms.clickatell.sender_id = "IXP_NAME"
 
 
+; Graphing backend in use
+; mrtg or cacti
+graph.backend = "mrtg"
+
 ; MRTG Parameters
 mrtg.path = http://www.example.com/mrtg/members
 
@@ -134,6 +138,11 @@ mrtg.traffic_graphs[] = "network1::IXP Infrastructure #1"
 mrtg.traffic_graphs[] = "network2::IXP Infrastructure #2"
 
 mrtg.trunk_graphs[] = "core-pop1-pop2-lan1::PoP 1 to PoP 2 (LAN1)"
+
+; Cacti Parameters
+cacti.path = "http://<hostname>/cacti/soap_service.php"
+cacti.user = "<user>"
+cacti.pass = "<pass>"
 
 ; LANs for public and 'my' peering matric.
 peering_matrix.public.0.name   = "Public Peering LAN #1"

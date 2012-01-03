@@ -120,6 +120,9 @@ class MrtgController extends Zend_Controller_Action
             die();
         }
 
+        if( $this->getGraphingClass() != "INEX_Mrtg" )
+            die();
+
         // call the parent's version where all the Zend magic happens
         parent::__construct( $request, $response, $invokeArgs );
     }

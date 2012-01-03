@@ -26,26 +26,28 @@
 <h2>Aggregate Traffic Statistics</h2>
 
 <p>
-	<a href="{genUrl controller="dashboard" action="statistics-drilldown" shortname=$customer.shortname category='bits' monitorindex='aggregate'}">
-	    {genMrtgImgUrlTag shortname=$customer.shortname category='bits' monitorindex='aggregate'}
+    <a href="{genUrl controller="dashboard" action="statistics-drilldown" shortname=$customer.shortname category='bits' monitorindex='aggregate'}">
+        {genMrtgImgUrlTag shortname=$customer.shortname category='bits' monitorindex='aggregate' graphBackend=$graphBackend}
     </a>
 </p>
 
 
 {foreach from=$connections item=connection}
+    {foreach from=$connection.Physicalinterface item=physicalinterface}
 
     <h2>
         Connection:
-                {$connection.Physicalinterface.0.Switchport.SwitchTable.Cabinet.Location.name}
-            / {$connection.Physicalinterface.0.Switchport.SwitchTable.name}
-            / {$connection.Physicalinterface.0.Switchport.name} ({$connection.Physicalinterface.0.speed}Mb/s)
+                {$physicalinterface.Switchport.SwitchTable.Cabinet.Location.name}
+            / {$physicalinterface.Switchport.SwitchTable.name}
+            / {$physicalinterface.Switchport.name} ({$physicalinterface.speed}Mb/s)
     </h2>
 
 
     <p>
-    	<a href="{genUrl controller="dashboard" action="statistics-drilldown" shortname=$customer.shortname category='bits' monitorindex=$connection.Physicalinterface.0.monitorindex}">
-	        {genMrtgImgUrlTag shortname=$customer.shortname monitorindex=$connection.Physicalinterface.0.monitorindex}
+        <a href="{genUrl controller="dashboard" action="statistics-drilldown" shortname=$customer.shortname category='bits' monitorindex=$physicalinterface.monitorindex}">
+            {genMrtgImgUrlTag shortname=$customer.shortname monitorindex=$physicalinterface.monitorindex switchport=$physicalinterface.Switchport.id graphBackend=$graphBackend}
         </a>
     </p>
 
+    {/foreach}
 {/foreach}

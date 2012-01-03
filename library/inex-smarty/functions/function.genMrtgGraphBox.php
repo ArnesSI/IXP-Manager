@@ -29,7 +29,14 @@
  */
 function smarty_function_genMrtgGraphBox( $params, &$smarty )
 {
-    $url = INEX_Mrtg::generateZendFrontendUrl( $params );
+    $graphBackend = 'INEX_Mrtg';
+    if( isset($params['graphBackend']) )
+        $graphBackend = $params['graphBackend'];
+
+    $url = $graphBackend::generateZendFrontendUrl( $params );
+
+    if( $graphBackend != 'INEX_Mrtg' )
+        return '<img border="0" src="'.$url.'" />';
 
     $box = <<<END_BOX
 <table width="506" class="ltbr" cellspacing="1" cellpadding="1">

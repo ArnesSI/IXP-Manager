@@ -29,9 +29,13 @@
  */
 function smarty_function_genMrtgImgUrlTag( $params, &$smarty )
 {
-    $url = INEX_Mrtg::generateZendFrontendUrl( $params );
+    $graphBackend = 'INEX_Mrtg';
+    if( isset($params['graphBackend']) )
+        $graphBackend = $params['graphBackend'];
 
-    return '<img width="500" height="135" border="0" src="' . $url . '" />';
+    $url = Arnes_Cacti::generateZendFrontendUrl( $params );
+
+    return '<img border="0" src="' . $url . '" />';
 }
 
 ?>

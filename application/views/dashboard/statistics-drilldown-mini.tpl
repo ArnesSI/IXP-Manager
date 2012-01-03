@@ -25,6 +25,7 @@
             monitorindex=$monitorindex
             period=$pvalue
             values=$stats.$pvalue
+            graphBackend=$graphBackend
     }
 </p>
 
