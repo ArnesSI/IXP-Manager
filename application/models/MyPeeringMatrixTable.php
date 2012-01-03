@@ -139,28 +139,28 @@ class MyPeeringMatrixTable extends Doctrine_Table
         $mypeers_custids = array_keys( $mypeers_by_custids );
 
         // find new
-        foreach( $custs_ints as $vint )
+        foreach( $custs_ints_by_custids as $vint_cust_id => $vint )
         {
             // skip myself:
-            if( $vint->Virtualinterface->Cust['id'] == $custid )
+            if( $vint_cust_id == $custid )
                 continue;
                 
-            if( !in_array( $vint->Virtualinterface->Cust['id'], $mypeers_custids ) )
+            if( !in_array( $vint_cust_id, $mypeers_custids ) )
             {
                 // found a missing / new peer
                 $mp = new MyPeeringMatrix();
                 $mp['custid'] = $custid;
-                $mp['peerid'] = $vint->Virtualinterface->Cust['id'];
+                $mp['peerid'] = $vint_cust_id;
                 $mp['vlan']   = $vlan['number'];
                 $mp['peered'] = MyPeeringMatrix::PEERED_STATE_UNKNOWN;
                 $mp['ipv6']   = 0;
                 $mp->save();
             }
-            else if( $mypeers_by_custids[$vint->Virtualinterface->Cust['id']]['dead'] == 1 )
+            else if( $mypeers_by_custids[$vint_cust_id]['dead'] == 1 )
             {
                 // looks like a customer ressurected from the dead
-                $mypeers_by_custids[$vint->Virtualinterface->Cust['id']]['dead'] = 0;
-                $mypeers_by_custids[$vint->Virtualinterface->Cust['id']]->save();
+                $mypeers_by_custids[$vint_cust_id]['dead'] = 0;
+                $mypeers_by_custids[$vint_cust_id]->save();
             }
         }
 
