@@ -22,7 +22,12 @@
 Total potential sessions: {$potential}.
 Active peering sessions: {$active}.
 {assign var=active value=`$active*100`}
-Percentage active peering sessions: {$active/$potential|string_format:'%d'}%
+Percentage active peering sessions: 
+{if $potential > 0}
+    {$active/$potential|string_format:'%d'}%
+{else}
+    0%
+{/if}
 </p>
 
 <table border="0" cellpadding="0" cellspacing="2" summary="" class="ltbr">
