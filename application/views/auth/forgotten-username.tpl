@@ -26,7 +26,7 @@
             Please enter your email address and we will send you all related usernames by email.
         </p>
         <p>
-            For help please contact <br />{mailto address='operations@inex.ie' encode='javascript' note='the operations team'}.
+            For help please contact <br />{mailto address=$config.identity.email encode='javascript' note='the operations team'}.
         </p>
         <p>
         	<a href="{genUrl controller="auth"}">Return to Login Page</a>.

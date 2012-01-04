@@ -67,7 +67,7 @@
 
 <div id="instructions" title="IXP Manager - Instructions" style="display: hide;">
 	<p>
-		Welcome to INEX's IXP Manager!
+		Welcome to {$config.identity.orgname}'s IXP Manager!
 	</p>
 	<p>
 		This account is a customer admin account and it can only be 
