@@ -190,9 +190,9 @@ class ProvisionController extends INEX_Controller_Action
 
         $form->getElement( 'cc' )->setValue( implode( ',', $userEmails ) );
 
-        $form->getElement( 'bcc' )->setValue( 'ops@inex.ie' );
+        $form->getElement( 'bcc' )->setValue( $this->config['identity']['email'] );
 
-        $form->getElement( 'subject' )->setValue( 'INEX Operations :: New Interface Details' );
+        $form->getElement( 'subject' )->setValue( $this->config['identity']['name'].' :: New Interface Details' );
 
         $this->view->networkInfo = Networkinfo::toStructuredArray();
         $this->view->progress    = $progress;
@@ -226,7 +226,7 @@ class ProvisionController extends INEX_Controller_Action
             {
                 $mail = new Zend_Mail();
                 $mail->setBodyText( $form->getValue( 'message' ) );
-                $mail->setFrom( 'operations@inex.ie', 'INEX Operations' );
+                $mail->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] );
                 $mail->setSubject( $form->getValue( 'subject' ) );
 
                 foreach( array( 'To', 'Cc', 'Bcc' ) as $recipient )
