@@ -4,7 +4,7 @@
 
 <table class="adminheading" border="0">
 	<tr>
-		<th class="Meeting">INEX Members' Meetings</th>
+		<th class="Meeting">{$config.identity.orgname} Members' Meetings</th>
 	</tr>
 </table>
 

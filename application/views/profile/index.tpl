@@ -18,7 +18,7 @@
 
 
 <p>
-This is your INEX user profile where you can change you contact preferences and password.
+This is your {$config.identity.orgname} user profile where you can change you contact preferences and password.
 </p>
 
 <p>

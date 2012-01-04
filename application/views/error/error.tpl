@@ -15,7 +15,7 @@
 <p>
 Please mail our support team with a description of what you were doing when the error
 occured and we will rectify it as soon as possible. Our support team can be reached via
-{mailto address="operations@inex.ie" encode="javascript" subject="Unexpected web error report"}.
+{mailto address=$config.identity.email encode="javascript" subject="Unexpected web error report"}.
 </p>
 
 </div>
