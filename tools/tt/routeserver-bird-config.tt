@@ -26,6 +26,9 @@ http://www.gnu.org/licenses/gpl-2.0.html
 log "/var/log/bird-routeserver.log" all;
 log syslog all;
 
+debug protocols all;
+debug commands 2;
+
 define routeserverasn = [% ixp_rs_asn %];
 define routeserveraddress = [% ixp_rs_address %];
 
@@ -95,39 +98,59 @@ prefix set martians;
 ## Standard IXP community filter
 ##
 
-function ixp_community_filter(int peerasn)
+function ixp_community_filter(int peerasn; int location)
 {
 	if !(source = RTS_BGP) then
 		return false;
 
-	# default community filtering schema doesn't support ASN32, as there
-	# are only 6 octets available for numbering.  We need
-	# draft-raszuk-wide-bgp-communities to become reality.
-
-	if peerasn > 65535 then
-		return true;
+	# Prefer "local" routes
+	if (routeserverasn, location) ~ bgp_community then
+		preference = 200;
 
 	# Implement widely used community filtering schema.
-	if (0, peerasn) ~ bgp_community then
+	if ((peerasn < 65536) && ((0, peerasn) ~ bgp_community)) || (ro, 0, peerasn) ~ bgp_ext_community then
 		return false;
-	if (routeserverasn, peerasn) ~ bgp_community then
+	if ((peerasn < 65536) && ((routeserverasn, peerasn) ~ bgp_community)) || (ro, routeserverasn, peerasn) ~ bgp_ext_community then
 		return true;
-	if (0, routeserverasn) ~ bgp_community then
+	if (0, routeserverasn) ~ bgp_community || (ro, 0, routeserverasn) ~ bgp_ext_community then
 		return false;
 
 	return true;
 }
 
+# clean up before announcing to peers
+function bgp_out(int peerasn)
+{
+	# don't announce back to same AS
+	if peerasn = bgp_path.first then
+		return false;
+
+	# remove location communities
+	bgp_community.delete((routeserverasn,61));
+	bgp_community.delete((routeserverasn,62));
+
+	return true;
+}
+
+# set location communities
+function bgp_in(int location)
+{
+	# remove location communities
+	bgp_community.delete((routeserverasn,61));
+	bgp_community.delete((routeserverasn,62));
+	# set location
+	bgp_community.add((routeserverasn,location));
+
+	return true;
+}
+
+
 ##
 ## Route Server client configuration
 ##
-[% FOREACH vid IN sortedkeys -%]
-[% IF entries.$vid.address AND entries.$vid.rsclient -%]
-[% asn = entries.$vid.autsys %]
-
-### AS[% asn %] - [% entries.$vid.name %]
-table t_as[% asn %];
-
+[% FOREACH asn IN sortedasns -%]
+[% IF asnlist.$asn.rsclient -%]
+### AS[% asn %] - [% asnlist.$asn.name %]
 filter f_import_as[% asn %]
 prefix set allnet;
 int set allas;
@@ -139,9 +162,7 @@ int set allas;
 	# to collapse.  Recommend evasive manoeuvers.
 	if (bgp_path.first != [% asn %] ) then
 		reject;
-[%# Only do filtering if this is enabled per client -%]
-[% IF entries.$vid.irrdbfilter -%]
-[% afifilter = 'afi ' _ protocol _ '.unicast ' _ entries.$vid.peeringmacro -%]
+[% afifilter = 'afi ' _ protocol _ '.unicast ' _ asnlist.$asn.peeringmacro -%]
 [% PERL -%]
 	use IXPManager::Template::Plugin::IRRToolSetBird;
 
@@ -149,14 +170,14 @@ int set allas;
 		afiresult => IXPManager::Template::Plugin::IRRToolSetBird->irrdbget ({
 			type	=> 'asnlist',
 			filter	=> '[% afifilter -%]',
-			irrdb	=> '[% entries.$vid.irrdb -%]',
+			irrdb	=> '[% asnlist.$asn.irrdb -%]',
 		})
 	);
 	$stash->set (
 		prefixresult => IXPManager::Template::Plugin::IRRToolSetBird->irrdbget ({
 			type	=> 'prefixlist',
 			filter	=> '[% afifilter -%]',
-			irrdb	=> '[% entries.$vid.irrdb -%]',
+			irrdb	=> '[% asnlist.$asn.irrdb -%]',
 		})
 	);
 [% END -%]
@@ -179,24 +200,34 @@ int set allas;
 	# Deny everything because the IRR database returned nothing
 	reject;
 [% END %]
-[%# IF entries.$vid.irrdbfilter -%]
-[% ELSE %]
-	# This ASN was configured not to use IRRDB filtering
-[% END -%]
 	accept;
 }
 
-protocol pipe pp_as[% asn %] {
-	description "Pipe for AS[% asn %] - [% entries.$vid.name %]";
+[% FOREACH vid IN asnlist.$asn.virtifacelist -%]
+[% IF entries.$vid.address AND entries.$vid.rsclient -%]
+[% loc = entries.$vid.locationshortname -%]
+[% SWITCH loc -%]
+[%   CASE 'tpl' -%]
+[%     loccommunity = 61 -%]
+[%   CASE 'ijs' -%]
+[%     loccommunity = 62 -%]
+[%   CASE -%]
+[%     loccommunity = 61 -%]
+[% END -%]
+### AS[% asn %] - [% asnlist.$asn.name %], peering on [% loc %]
+table t_as[% asn %]_[% loc %];
+
+protocol pipe pp_as[% asn %]_[% loc %] {
+	description "Pipe for AS[% asn %] - [% asnlist.$asn.name %] at [% loc %]";
 	table master;
 	mode transparent;
-	peer table t_as[% asn %];
+	peer table t_as[% asn %]_[% loc %];
 	import filter f_import_as[% asn %];
-	export where ixp_community_filter([% asn %]);
+	export where ixp_community_filter([% asn %], [% loccommunity %]);
 }
 
-protocol bgp pb_as[% asn %] {
-	description "RIB for AS[% asn %] - [% entries.$vid.name %]";
+protocol bgp pb_as[% asn %]_[% loc %] {
+	description "RIB for AS[% asn %] - [% asnlist.$asn.name %] at [% loc %]";
 	local as routeserverasn;
 	source address routeserveraddress;
 	neighbor [% entries.$vid.address %] as [% asn %];
@@ -205,12 +236,17 @@ protocol bgp pb_as[% asn %] {
 [% IF bgpmd5secret -%]
 	password "[% bgpmd5secret %]";
 [% END -%]
-	import all;
-	export all;
+	import where bgp_in([% loccommunity %]);
+	export where bgp_out([% asn %]);
 	route limit [% entries.$vid.maxprefixes -%];
-	table t_as[% asn %];
+	table t_as[% asn %]_[% loc %];
+	passive on;
 	rs client;
 }
+
+[% END -%]
+[% END -%]
+
 
 [% END -%]
 [% END -%]
