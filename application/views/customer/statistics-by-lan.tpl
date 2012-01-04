@@ -73,7 +73,7 @@
 
 <a href="{genUrl controller="dashboard" action="statistics" shortname=$int.Virtualinterface.Cust.shortname monitorindex=$pi.monitorindex category=$category}">
 	<img
-	    src="{genMrtgImgUrl shortname=$int.Virtualinterface.Cust.shortname category=$category period=$period monitorindex=$pi.monitorindex}"
+	    src="{genMrtgImgUrl shortname=$int.Virtualinterface.Cust.shortname category=$category period=$period monitorindex=$pi.monitorindex switchport=$pi.Switchport.id mini=1 graphBackend=$graphBackend}"
 	    width="300"
 	/>
 </a>

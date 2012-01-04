@@ -44,6 +44,7 @@
             period=$pvalue
             values=$stats.$pvalue
             graph=$graph
+            graphBackend=$graphBackend
     }
 </p>
 

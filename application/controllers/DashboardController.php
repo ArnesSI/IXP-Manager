@@ -167,25 +167,27 @@ class DashboardController extends INEX_Controller_Action
 
         if( $this->customer->isFullMember() )
         {
-	        // Get peering stats as set by the member
-	        $peering_stats = array();
-	        foreach( $this->config['peering_matrix']['public'] as $v )
-	        {
-	            $this->_generateOrUpdateMyPeeringMatrix( $v['number'] );
-	            $peering_stats[$v['name']] = MyPeeringMatrixTable::getStatesTotal( $this->customer['id'], $v['number'] );
-	        }
-	        
-	        $peering_stats['Total'] =  MyPeeringMatrixTable::getStatesTotal( $this->customer['id'] );
-	        $this->view->peering_stats = $peering_stats;
+            // Get peering stats as set by the member
+            $peering_stats = array();
+            foreach( $this->config['peering_matrix']['public'] as $v )
+            {
+                $this->_generateOrUpdateMyPeeringMatrix( $v['number'] );
+                $peering_stats[$v['name']] = MyPeeringMatrixTable::getStatesTotal( $this->customer['id'], $v['number'] );
+            }
 
-	        // Get the member's port and vlan details
-	        $this->view->networkInfo = Networkinfo::toStructuredArray();
-	        $this->view->connections = $this->customer->getConnections();
+            $peering_stats['Total'] =  MyPeeringMatrixTable::getStatesTotal( $this->customer['id'] );
+            $this->view->peering_stats = $peering_stats;
 
-	        $this->view->categories = INEX_Mrtg::$CATEGORIES;
+            // Get the member's port and vlan details
+            $this->view->networkInfo = Networkinfo::toStructuredArray();
+            $this->view->connections = $this->customer->getConnections();
 
-	        $this->view->rsEnabled    = $this->customer->isRouteServerClient( $this->config['primary_peering_lan']['vlan_tag'] );
-	        $this->view->as112Enabled = $this->customer->isAS112Client();
+            $graphBackend = $this->getGraphingClass();
+            $this->view->categories = $graphBackend::$CATEGORIES;
+            $this->view->graphBackend = $graphBackend;
+
+            $this->view->rsEnabled    = $this->customer->isRouteServerClient( $this->config['primary_peering_lan']['vlan_tag'] );
+            $this->view->as112Enabled = $this->customer->isAS112Client();
         }
 
         $this->view->display( 'dashboard' . DIRECTORY_SEPARATOR . 'index.tpl' );
@@ -272,6 +274,8 @@ class DashboardController extends INEX_Controller_Action
 
     public function statisticsAction()
     {
+        $graphBackend = $this->getGraphingClass();
+
         if( $this->user['privs'] < User::AUTH_SUPERUSER )
             $shortname = $this->customer['shortname'];
         else
@@ -285,14 +289,16 @@ class DashboardController extends INEX_Controller_Action
         // is there a category selected?
         $category = $this->getRequest()->getParam( 'category', false );
         if( $category === false )
-            $this->view->category = INEX_Mrtg::$CATEGORIES['Bits'];
-        else if( !in_array( $category, INEX_Mrtg::$CATEGORIES ) )
-            $this->view->category = INEX_Mrtg::$CATEGORIES['Bits'];
+            $this->view->category = $graphBackend::$CATEGORIES['Bits'];
+        else if( !in_array( $category, $graphBackend ::$CATEGORIES ) )
+            $this->view->category = $graphBackend ::$CATEGORIES['Bits'];
         else
             $this->view->category = $category;
 
-        $this->view->categories = INEX_Mrtg::$CATEGORIES;
+        $this->view->categories = $graphBackend::$CATEGORIES;
+        $this->view->categories_aggregate = $graphBackend::$CATEGORIES_AGGREGATE;
         $this->view->shortname = $shortname;
+        $this->view->graphBackend = $graphBackend;
 
         $this->view->customer = $cust;
 
@@ -302,10 +308,12 @@ class DashboardController extends INEX_Controller_Action
 
     public function statisticsDrilldownAction()
     {
+        $graphBackend = $this->getGraphingClass();
+
         // is there a category selected?
-        $category = $this->getRequest()->getParam( 'category', INEX_Mrtg::$CATEGORIES['Bits'] );
-        if( !in_array( $category, INEX_Mrtg::$CATEGORIES ) )
-            $this->view->category = INEX_Mrtg::$CATEGORIES['Bits'];
+        $category = $this->getRequest()->getParam( 'category', $graphBackend::$CATEGORIES['Bits'] );
+        if( !in_array( $category, $graphBackend::$CATEGORIES ) )
+            $this->view->category = $graphBackend::$CATEGORIES['Bits'];
         else
             $this->view->category = $category;
 
@@ -332,31 +340,38 @@ class DashboardController extends INEX_Controller_Action
 
             $this->view->switchname = $interface['Physicalinterface'][0]['Switchport']['SwitchTable']['name'];
             $this->view->portname   = $interface['Physicalinterface'][0]['Switchport']['name'];
+            $this->view->portid     = $interface['Physicalinterface'][0]['Switchport']['id'];
+            $this->view->categories   = $graphBackend::$CATEGORIES;
         }
         else
         {
             $this->view->switchname = '';
             $this->view->portname   = '';
+            $this->view->portid     = '0';
+            $this->view->categories   = $graphBackend::$CATEGORIES_AGGREGATE;
         }
 
-        $this->view->periods      = INEX_Mrtg::$PERIODS;
-        $this->view->categories   = INEX_Mrtg::$CATEGORIES;
+        $this->view->periods      = $graphBackend::$PERIODS;
         $this->view->monitorindex = $monitorindex;
 
         $stats = array();
-        foreach( INEX_Mrtg::$PERIODS as $period )
+        if( $graphBackend == 'INEX_Mrtg' )
         {
-            $mrtg = new INEX_Mrtg( INEX_Mrtg::getMrtgFilePath( $this->config['mrtg']['path'],
-                    'LOG', $this->view->monitorindex, $this->view->category,
-                    $cust->shortname )
-            );
+            foreach( $graphBackend::$PERIODS as $period )
+            {
+                $mrtg = new INEX_Mrtg( INEX_Mrtg::getMrtgFilePath( $this->config['mrtg']['path'],
+                        'LOG', $this->view->monitorindex, $this->view->category,
+                        $cust->shortname )
+                );
 
-            $stats[$period] = $mrtg->getValues( $period, $this->view->category );
+                $stats[$period] = $mrtg->getValues( $period, $this->view->category );
+            }
         }
 
         $this->view->customer  = $cust;
         $this->view->shortname = $shortname;
         $this->view->stats     = $stats;
+        $this->view->graphBackend = $graphBackend;
 
         if( $this->_request->getParam( 'mini', 0 ) == '1' )
         {
@@ -375,6 +390,8 @@ class DashboardController extends INEX_Controller_Action
 
     public function trafficStatsAction()
     {
+        $graphBackend = $this->getGraphingClass();
+
         // get the available graphs
         foreach( $this->config['mrtg']['traffic_graphs'] as $g )
         {
@@ -388,29 +405,33 @@ class DashboardController extends INEX_Controller_Action
             $graph = $images[0];
 
         // is there a category selected?
-        $category = $this->getRequest()->getParam( 'category', INEX_Mrtg::CATEGORY_BITS );
-        if( !in_array( $category, INEX_Mrtg::$CATEGORIES_AGGREGATE ) )
-            $this->view->category = INEX_Mrtg::CATEGORY_BITS;
+        $category = $this->getRequest()->getParam( 'category', $graphBackend::CATEGORY_BITS );
+        if( !in_array( $category, $graphBackend::$CATEGORIES_AGGREGATE ) )
+            $this->view->category = $graphBackend::CATEGORY_BITS;
         else
             $this->view->category = $category;
 
         $stats = array();
-        foreach( INEX_Mrtg::$PERIODS as $period )
+        if( $graphBackend == 'INEX_Mrtg' )
         {
-            $mrtg = new INEX_Mrtg(
-                $this->config['mrtg']['path']
-                    . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
-                    . 'inex_peering-' . $graph . '-' . $category . '.log'
-            );
+            foreach( INEX_Mrtg::$PERIODS as $period )
+            {
+                $mrtg = new INEX_Mrtg(
+                    $this->config['mrtg']['path']
+                        . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
+                        . 'inex_peering-' . $graph . '-' . $category . '.log'
+                );
 
-            $stats[$period] = $mrtg->getValues( $period, $category );
+                $stats[$period] = $mrtg->getValues( $period, $category );
+            }
         }
 
         $this->view->graphs     = $graphs;
-        $this->view->periods    = INEX_Mrtg::$PERIODS;
-        $this->view->categories = INEX_Mrtg::$CATEGORIES_AGGREGATE;
+        $this->view->periods    = $graphBackend::$PERIODS;
+        $this->view->categories = $graphBackend::$CATEGORIES_AGGREGATE;
         $this->view->graph      = $graph;
         $this->view->stats      = $stats;
+        $this->view->graphBackend = $graphBackend;
 
         $this->view->display( 'dashboard' . DIRECTORY_SEPARATOR . 'statistics-peering-graphs.tpl' );
     }
@@ -418,6 +439,8 @@ class DashboardController extends INEX_Controller_Action
 
     public function trunkGraphsAction()
     {
+        $graphBackend = $this->getGraphingClass();
+
         // get the available graphs
         foreach( $this->config['mrtg']['trunk_graphs'] as $g )
         {
@@ -431,21 +454,25 @@ class DashboardController extends INEX_Controller_Action
             $graph = $images[0];
 
         $stats = array();
-        foreach( INEX_Mrtg::$PERIODS as $period )
+        if( $graphBackend == 'INEX_Mrtg' )
         {
-            $mrtg = new INEX_Mrtg(
-                $this->config['mrtg']['path']
-                    . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
-                    . 'trunks' . DIRECTORY_SEPARATOR . $graph . '.log'
-            );
+            foreach( INEX_Mrtg::$PERIODS as $period )
+            {
+                $mrtg = new INEX_Mrtg(
+                    $this->config['mrtg']['path']
+                        . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
+                        . 'trunks' . DIRECTORY_SEPARATOR . $graph . '.log'
+                );
 
-            $stats[$period] = $mrtg->getValues( $period, INEX_Mrtg::CATEGORY_BITS );
+                $stats[$period] = $mrtg->getValues( $period, INEX_Mrtg::CATEGORY_BITS );
+            }
         }
 
         $this->view->graphs  = $graphs;
-        $this->view->periods = INEX_Mrtg::$PERIODS;
+        $this->view->periods = $graphBackend::$PERIODS;
         $this->view->graph   = $graph;
         $this->view->stats   = $stats;
+        $this->view->graphBackend = $graphBackend;
 
         $this->view->display( 'dashboard' . DIRECTORY_SEPARATOR . 'statistics-trunk-graphs.tpl' );
     }
@@ -453,6 +480,8 @@ class DashboardController extends INEX_Controller_Action
 
     public function switchGraphsAction()
     {
+        $graphBackend = $this->getGraphingClass();
+
         // get the available graphs
         $_switches = Doctrine_Query::create()
             ->select( 'sw.name' )
@@ -474,30 +503,34 @@ class DashboardController extends INEX_Controller_Action
             $switch = $_switches[0]['id'];
 
         // is there a category selected?
-        $category = $this->getRequest()->getParam( 'category', INEX_Mrtg::CATEGORY_BITS );
-        if( !in_array( $category, INEX_Mrtg::$CATEGORIES_AGGREGATE ) )
-            $this->view->category = INEX_Mrtg::CATEGORY_BITS;
+        $category = $this->getRequest()->getParam( 'category', $graphBackend::CATEGORY_BITS );
+        if( !in_array( $category, $graphBackend::$CATEGORIES_AGGREGATE ) )
+            $this->view->category = $graphBackend::CATEGORY_BITS;
         else
             $this->view->category = $category;
 
         $stats = array();
-        foreach( INEX_Mrtg::$PERIODS as $period )
+        if( $graphBackend == 'INEX_Mrtg' )
         {
-            $mrtg = new INEX_Mrtg(
-                $this->config['mrtg']['path']
-                    . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
-                    . 'switches' . DIRECTORY_SEPARATOR . 'switch-aggregate-'
-                    . $switches[$switch]['name'] . '-' . $category . '.log'
-            );
+            foreach( INEX_Mrtg::$PERIODS as $period )
+            {
+                $mrtg = new INEX_Mrtg(
+                    $this->config['mrtg']['path']
+                        . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
+                        . 'switches' . DIRECTORY_SEPARATOR . 'switch-aggregate-'
+                        . $switches[$switch]['name'] . '-' . $category . '.log'
+                );
 
-            $stats[$period] = $mrtg->getValues( $period, $category );
+                $stats[$period] = $mrtg->getValues( $period, $category );
+            }
         }
 
         $this->view->switches   = $switches;
-        $this->view->periods    = INEX_Mrtg::$PERIODS;
+        $this->view->periods    = $graphBackend::$PERIODS;
         $this->view->switch     = $switch;
         $this->view->stats      = $stats;
-        $this->view->categories = INEX_Mrtg::$CATEGORIES_AGGREGATE;
+        $this->view->categories = $graphBackend::$CATEGORIES_AGGREGATE;
+        $this->view->graphBackend =  $graphBackend;
 
         $this->view->display( 'dashboard' . DIRECTORY_SEPARATOR . 'statistics-switch-graphs.tpl' );
     }

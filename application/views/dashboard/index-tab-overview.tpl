@@ -97,7 +97,7 @@
 
             <p>
             	<a href="{genUrl controller="dashboard" action="statistics-drilldown" shortname=$customer.shortname category='bits' monitorindex='aggregate'}">
-	                {genMrtgImgUrlTag shortname=$customer.shortname category='bits' monitorindex='aggregate'}
+	                {genMrtgImgUrlTag shortname=$customer.shortname category='bits' monitorindex='aggregate' graphBackend=$graphBackend}
                 </a>
             </p>
 

@@ -486,15 +486,17 @@ END_JSON;
 
     public function statisticsOverviewAction()
     {
-        $category = $this->_request->getParam( 'category', INEX_Mrtg::$CATEGORIES['Bits'] );
+        $graphBackend = $this->getGraphingClass();
 
-        if( !in_array( $category, INEX_Mrtg::$CATEGORIES ) )
-            $category = INEX_Mrtg::$CATEGORIES['Bits'];
+        $category = $this->_request->getParam( 'category', $graphBackend::$CATEGORIES_AGGREGATE['Bits'] );
 
-        $period = $this->_request->getParam( 'period', INEX_Mrtg::$PERIODS['Day'] );
+        if( !in_array( $category, $graphBackend::$CATEGORIES_AGGREGATE ) )
+            $category = $graphBackend::$CATEGORIES_AGGREGATE['Bits'];
 
-        if( !in_array( $period, INEX_Mrtg::$PERIODS ) )
-            $period = INEX_Mrtg::$PERIODS['Day'];
+        $period = $this->_request->getParam( 'period', $graphBackend::$PERIODS['Day'] );
+
+        if( !in_array( $period, $graphBackend::$PERIODS ) )
+            $period = $graphBackend::$PERIODS['Day'];
 
         $this->view->custs = Doctrine_Query::create()
             ->select( 'c.shortname' )
@@ -508,23 +510,27 @@ END_JSON;
             ->fetchArray();
 
         $this->view->category   = $category;
-        $this->view->categories = INEX_Mrtg::$CATEGORIES;
+        $this->view->categories = $graphBackend::$CATEGORIES_AGGREGATE;
         $this->view->period     = $period;
-        $this->view->periods    = INEX_Mrtg::$PERIODS;
+        $this->view->periods    = $graphBackend::$PERIODS;
+        $this->view->graphBackend = $graphBackend;
+
         $this->view->display( 'customer' . DIRECTORY_SEPARATOR . 'statistics-overview.tpl' );
     }
 
     public function statisticsByLanAction()
     {
-        $category = $this->_request->getParam( 'category', INEX_Mrtg::$CATEGORIES['Bits'] );
+        $graphBackend = $this->getGraphingClass();
 
-        if( !in_array( $category, INEX_Mrtg::$CATEGORIES ) )
-            $category = INEX_Mrtg::$CATEGORIES['Bits'];
+        $category = $this->_request->getParam( 'category', $graphBackend::$CATEGORIES['Bits'] );
 
-        $period = $this->_request->getParam( 'period', INEX_Mrtg::$PERIODS['Day'] );
+        if( !in_array( $category, $graphBackend::$CATEGORIES ) )
+            $category = $graphBackend::$CATEGORIES['Bits'];
 
-        if( !in_array( $period, INEX_Mrtg::$PERIODS ) )
-            $period = INEX_Mrtg::$PERIODS['Day'];
+        $period = $this->_request->getParam( 'period', $graphBackend::$PERIODS['Day'] );
+
+        if( !in_array( $period, $graphBackend::$PERIODS ) )
+            $period = $graphBackend::$PERIODS['Day'];
 
         $lanTag = $this->_request->getParam( 'lan', 10 );
 
@@ -551,9 +557,11 @@ END_JSON;
             ->fetchArray();
 
         $this->view->category   = $category;
-        $this->view->categories = INEX_Mrtg::$CATEGORIES;
+        $this->view->categories = $graphBackend::$CATEGORIES;
         $this->view->period     = $period;
-        $this->view->periods    = INEX_Mrtg::$PERIODS;
+        $this->view->periods    = $graphBackend::$PERIODS;
+        $this->view->graphBackend = $graphBackend;
+
         $this->view->display( 'customer' . DIRECTORY_SEPARATOR . 'statistics-by-lan.tpl' );
     }
 

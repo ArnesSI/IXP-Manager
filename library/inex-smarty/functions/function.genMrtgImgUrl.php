@@ -29,7 +29,11 @@
  */
 function smarty_function_genMrtgImgUrl( $params, &$smarty )
 {
-    return INEX_Mrtg::generateZendFrontendUrl( $params );
+    $graphBackend = 'INEX_Mrtg';
+    if( isset($params['graphBackend']) )
+        $graphBackend = $params['graphBackend'];
+
+    return $graphBackend::generateZendFrontendUrl( $params );
 }
 
 ?>
