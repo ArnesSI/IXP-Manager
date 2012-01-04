@@ -1,7 +1,7 @@
 <?php
 
 /*
- * INEX - My Peering Manager: {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}
+ * {$config.identity.orgname} - My Peering Manager: {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}
  *
  * Copyright (c) Internet Neutral Exchange Association Ltd T/A INEX {$smarty.now|date_format:"%Y"}. All rights reserved.
  *

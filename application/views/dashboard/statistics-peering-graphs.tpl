@@ -7,7 +7,7 @@
 <table class="adminheading" border="0">
 <tr>
     <th class="Statistics">
-    INEX Public Traffic Statistics
+    {$config.identity.orgname} Public Traffic Statistics
     </th>
 </tr>
 </table>
