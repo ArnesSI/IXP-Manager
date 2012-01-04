@@ -321,8 +321,8 @@ END_JSON;
 
         $form->getElement( 'cc' )->setValue( implode( ',', $userEmails ) );
 
-        $form->getElement( 'bcc' )->setValue( $this->_config['identity']['email'] );
-        $form->getElement( 'subject' )->setValue( $this->_config['identity']['name'] . ' :: Welcome Mail' );
+        $form->getElement( 'bcc' )->setValue( $this->config['identity']['email'] );
+        $form->getElement( 'subject' )->setValue( $this->config['identity']['name'] . ' :: Welcome Mail' );
 
         // Let's get the information we need for the welcome mail from the database.
 
@@ -374,7 +374,7 @@ END_JSON;
             {
                 $mail = new Zend_Mail();
                 $mail->setBodyText( $form->getValue( 'message' ) );
-                $mail->setFrom( $this->_config['identity']['email'], $this->_config['identity']['name'] );
+                $mail->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] );
                 $mail->setSubject( $form->getValue( 'subject' ) );
 
                 foreach( array( 'To', 'Cc', 'Bcc' ) as $recipient )
