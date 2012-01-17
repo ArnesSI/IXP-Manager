@@ -194,7 +194,10 @@ $(document).ready(function() {
 	$('#ixpDataTable').show();
 	
 	$( oTable.fnGetNodes() ).each( function( index, element ){
+
+        $( element ).bind('dblclick', function() { window.location.assign( "/ixp/{/literal}{$controller}{literal}/view/id/"  + oTable.fnGetData( index )[0] ); } );
 		{/literal}
+
 		{if $hasCustomContextMenu}
 	    	{tmplinclude file=$hasCustomContextMenu|cat:".js.tpl"}
 		{else}
