@@ -107,16 +107,6 @@ them to make maximum use of this application:
     </p>
 </dd>
 
-<dt><strong>The <em>PM</em> (Peering Matrix) Column:</strong></dt>
-
-<dd>
-    <p>
-    This column is based on BGP traffic snooping on the SIX peering LANs for IPv4 and route server states.
-    It is <em>per peering LAN</em> and will reflect your peering status for the VLAN you have
-    selected. Some members have opted out of this and they will be shown as <em>N/A</em>.
-    </p>
-</dd>
-
 <dt><strong>The <em>RS</em> Column:</strong></dt>
 
 <dd>
