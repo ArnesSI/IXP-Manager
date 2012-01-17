@@ -1,6 +1,6 @@
 {tmplinclude file="header-tiny.tpl" pageTitle="IXP Manager :: Help"}
 
-<div class="yui-g">
+<div>
 
 <table class="adminheading" border="0">
 <tr>
