@@ -16,7 +16,7 @@
 <tr>
     <form method="post">
        <td>
-	        <label for="dt_input">INEX Network: </label>
+	        <label for="dt_input">{$config.identity.orgname} Network: </label>
 	        <select id="dt_input" name="vlan">
 	            <option></option>
 	            {foreach from=$vlans item=vlan}

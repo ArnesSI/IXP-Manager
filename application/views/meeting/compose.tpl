@@ -4,7 +4,7 @@
 
 <table class="adminheading" border="0">
 	<tr>
-		<th class="Meeting">INEX Members' Meetings :: Compose Mail Notification</th>
+		<th class="Meeting">{$config.identity.orgname} Members' Meetings :: Compose Mail Notification</th>
 	</tr>
 </table>
 
@@ -69,7 +69,7 @@ When you're happy with the result, you can send it to <code>members@inex.ie</cod
     </td>
     <td>
         <input id="subject" type="text" name="subject"
-            value="{if isset( $subject )}{$subject}{else}INEX Members' Meeting - {$meeting.date|strtotime|date_format}{/if}"
+            value="{if isset( $subject )}{$subject}{else}{$config.identity.orgname} Members' Meeting - {$meeting.date|strtotime|date_format}{/if}"
             maxlength="254" size="60"
         />
     </td>

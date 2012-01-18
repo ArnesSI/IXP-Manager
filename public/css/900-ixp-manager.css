@@ -157,7 +157,7 @@ fieldset {
 }
 
 .form button, .form input[type="text"], .form input[type="password"], .form input[type="checkbox"], .form input[type="submit"], .form input[type="reset"] {
-    border : solid 1px #4FA500;
+    border : solid 1px #919293;
     background: #f9f9f9; /* #E9ECEF; */
     color : #666666;
     font-weight : bold;
@@ -174,7 +174,7 @@ fieldset {
 }
 
 .form select {
-    border : solid 1px #4FA500;
+    border : solid 1px #919293;
     background: #f9f9f9; /* #E9ECEF; */
     color : #666666;
     font-weight : bold;
@@ -183,7 +183,7 @@ fieldset {
 }
 
 .form textarea {
-    border : solid 1px #4FA500;
+    border : solid 1px #919293;
     background: #f9f9f9;
     color : #666666;
     font-weight : bold;
@@ -210,7 +210,7 @@ h2 {
     font-size : 18px;
     font-weight: bold;
     text-align: left;
-    color: #4FA500;
+    color: #E6832A;
 }
 
 h3 {
@@ -219,14 +219,14 @@ h3 {
     font-size : 16px;
     font-weight: bold;
     text-align: left;
-    color: #4FA500;
+    color: #E6832A;
 }
 
 h4 {
     background-color: inherit;
     font-weight: bold;
     text-align: left;
-    color: #4FA500;
+    color: #E6832A;
 }
 
 
@@ -247,7 +247,7 @@ h4 {
 #footer {
     position: fixed;
     bottom: 0;
-    z-index: 147483647;    
+    z-index: 1000;
     margin-left: auto;
     margin-right: auto;
     margin-top: 25px;
@@ -261,6 +261,7 @@ h4 {
     width: 100%;
     background-color:#2f2f2f;
     display: block;
+    font-size: smaller;
 }
 
 
@@ -334,23 +335,23 @@ h4 {
 .background {
     vertical-align: top;
     text-align: left;
-    background-image: url( ../images/inex-green-corner-153x168.gif );
+    background-image: url( ../images/arnes-orange-corner-153x168.gif );
     background-repeat: no-repeat;
     height: 167px;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 .logo {
     font-size: 220%;
     font-variant:small-caps;
-    color:#005a9c;
+    color:#919293;
     font-weight:bolder;
     text-align:left;
     vertical-align: bottom;
 }
 
 .button {
-    border : solid 1px #4FA500;
+    border : solid 1px #919293;
     background: #E9ECEF;
     color : #666666;
     font-weight : bold;
@@ -363,14 +364,14 @@ h4 {
     margin-right: auto;
     margin-top: 6em;
     padding: 15px;
-    border: 1px solid #4FA500;
+    border: 1px solid #919293;
     width: 429px;
     background: #F1F3F5;
 }
     
 
 .login h1 {
-    color: #4fa500;
+    color: #E6832A;
     margin: 0px;
     padding: 0px 0px 0px 0px;
     text-align: left;
@@ -383,7 +384,7 @@ h4 {
     }
     
 .form-block {
-    border: 1px solid #4FA500;
+    border: 1px solid #919293;
     background: #E0E0E0;
     padding-top: 15px;
     padding-left: 10px;
@@ -412,7 +413,7 @@ h4 {
     width: 200px;
     margin: 4px 0 1em 0;
     padding: 3px;
-    border: 1px solid #4FA500;
+    border: 1px solid #919293;
 }
 
 .clr {
@@ -842,7 +843,7 @@ h4 {
 }
 
 .meeting h1 {
-	color: #4fa500;
+	color: #E6832A;
 	font-size: 146.5%;
 	font-weight: bold;
     padding-bottom: 0px;
@@ -850,7 +851,7 @@ h4 {
 } 
 
 .meeting h4 {
-    color: #4fa500;
+    color: #919293;
     font-size: 100%;
     font-weight: normal;
     font-style: italic;
@@ -858,7 +859,7 @@ h4 {
 
 .meeting.title {
     padding-bottom: 2px;
-    border-bottom: 2px solid #4fa500;
+    border-bottom: 2px solid #E6832A;
     margin-bottom: 10px;
 }
 
@@ -963,6 +964,12 @@ h4 {
 }
 
 #documentation h1 {
-    color: #4FA500;
+    color: #E6832A;
 }
 
+
+/* get rid of yui's left and right margins */
+#doc3
+{
+    margin: auto;
+}

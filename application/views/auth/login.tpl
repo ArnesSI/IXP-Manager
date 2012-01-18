@@ -22,8 +22,8 @@
     <div class="login-text">
 
         <div class="ctr"><img src="{genUrl}/images/joomla-admin/security.png" width="64" height="64" alt="security" /></div>
-        <p><strong>Welcome to INEX's IXP Manager!</strong></p>
-        <p>For help please contact <br />{mailto address='operations@inex.ie' encode='javascript' note='the operations team'}.</p>
+        <p><strong>Welcome to {$config.identity.orgname}'s IXP Manager!</strong></p>
+        <p>For help please contact <br />{mailto address=$config.identity.email encode='javascript' note='the operations team'}.</p>
     </div>
     <div class="clr"></div>
 </div>

@@ -44,7 +44,7 @@
 
     <div id="header">
             <div id="headertext">
-            <strong>INEX :: IXP Manager</strong>
+            <strong>{$config.identity.orgname} :: IXP Manager</strong>
             </div>
         </div>
     </div>

@@ -44,8 +44,6 @@ class AuthController extends INEX_Controller_Action
 
     public function logoutAction()
     {
-        $this->view->clear_all_assign();
-
         $auth = Zend_Auth::getInstance();
 
         if( $auth->hasIdentity() )
@@ -58,9 +56,10 @@ class AuthController extends INEX_Controller_Action
             $this->view->message = new INEX_Message( 'To protect your account and its information, '
                 . 'you have been logged out automatically.', INEX_Message::MESSAGE_TYPE_ALERT );
 
-
-        Zend_Session::destroy( true, true );
         $this->view->display( 'auth/login.tpl' );
+
+        $this->view->clear_all_assign();
+        Zend_Session::destroy( true, true );
     }
 
     public function processAction()

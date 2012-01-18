@@ -6,7 +6,7 @@
             {if not $skipRSCheck and not $rsEnabled}
                 <div id="overviewMessage">
                     <div class="message message-error">
-                        You are not using INEX's robust route server cluster. Please <a href="{genUrl controller='dashboard' action='rs-info'}">click here</a> for more information.
+                        You are not using {$config.identity.orgname}'s robust route server cluster. Please <a href="{genUrl controller='dashboard' action='rs-info'}">click here</a> for more information.
                     </div>
                 </div>
 
@@ -14,7 +14,7 @@
                 {if not $skipAS112Check and not $as112Enabled}
                     <div id="overviewMessage">
                         <div class="message message-error">
-                            You are not using INEX's AS112 service. Please <a href="{genUrl controller='dashboard' action='as112'}">click here</a> for more information.
+                            You are not using {$config.identity.orgname}'s AS112 service. Please <a href="{genUrl controller='dashboard' action='as112'}">click here</a> for more information.
                         </div>
                     </div>
                 {/if}

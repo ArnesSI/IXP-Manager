@@ -4,7 +4,7 @@ Dear {$bcust.name} Peering Team,
 We are {$customer.name} ({$customer.corpwww}).
 
 We would like to arrange peering session(s) with you on the
-following interface(s) at INEX:
+following interface(s) at {$config.identity.orgname}:
 
 {foreach from=$pp item=p}
 

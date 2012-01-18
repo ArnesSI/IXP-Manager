@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Welcome to INEX's IXP Manager</title>
+    <title>Welcome to {$config.identity.orgname}'s IXP Manager</title>
 
     <style>
         {literal}
@@ -18,7 +18,7 @@
 <table border="0" width="90%" align="center">
     <tr>
         <td align="left" valign="middle">
-            <h1>Welcome to INEX's IXP Manager</h1>
+            <h1>Welcome to {$config.identity.orgname}'s IXP Manager</h1>
         </td>
         <td align="right" valign="top">
             <img src="cid:ixp_logo" alt="[IXP Logo]" />
@@ -28,7 +28,7 @@
 </center>
 
 <p>
-A new user account has been created for you on the INEX IXP Management system.
+A new user account has been created for you on the {$config.identity.orgname} IXP Management system.
 </p>
 
 <p>
@@ -64,13 +64,13 @@ Once logged in, you will have access to a number of features including:
     <li>list of IXP members and peering contact details;</li>
     <li>your traffic graphs;</li>
     <li>ability to view and edit your company details;</li>
-    <li>your INEX port configuration details;</li>
+    <li>your {$config.identity.orgname} port configuration details;</li>
     <li>peering matrix;</li>
     <li>route server, AS112 and other service information.</li>
 </ul>
 
 <p>
-If you require any assistance, please contact INEX Operations on <a href="mailto:operations@inex.ie">operations@inex.ie</a>.
+If you require any assistance, please contact {$config.identity.name} on <a href="mailto:{$config.identity.email}">{$config.identity.email}</a>.
 </p>
 
 

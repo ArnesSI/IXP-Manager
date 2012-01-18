@@ -372,7 +372,7 @@ END_JSON;
 
             if( $validForm )
             {
-                $mail = new Zend_Mail();
+                $mail = new Zend_Mail('UTF-8');
                 $mail->setBodyText( $form->getValue( 'message' ) );
                 $mail->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] );
                 $mail->setSubject( $form->getValue( 'subject' ) );

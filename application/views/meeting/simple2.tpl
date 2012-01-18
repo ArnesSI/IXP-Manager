@@ -1,6 +1,6 @@
 <p>
     <em>
-        This is public list of INEX Members' Meetings. INEX members should log into the IXP Manager
+        This is public list of {$config.identity.orgname} Members' Meetings. {$config.identity.orgname} members should log into the IXP Manager
         where they can download presentations and view recorded presentations that were requested 
         to not be made public as well as access speaker contact details.
     </em>

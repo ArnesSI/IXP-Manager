@@ -338,7 +338,7 @@ table.adminheading {
     border: 0px;
     width: 100%;
     border-collapse: collapse;
-    color: #4FA500;
+    color: #E6832A;
     font-size : 153.9%;
     font-weight: bold;
     text-align: left;
@@ -444,7 +444,7 @@ div.menuwrapper {
     border-left: 1px solid #cccccc;
     padding: 0px;
 	margin: 0px;
-    width: 100%;
+    /* width: 100%;  not needed, or will strech to 100% + border width */
 }
 
 table.menubar {

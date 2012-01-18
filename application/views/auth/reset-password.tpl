@@ -33,7 +33,7 @@
         	password on the right.
         </p>
         <p>
-            For help please contact <br />{mailto address='operations@inex.ie' encode='javascript' note='the operations team'}.
+            For help please contact <br />{mailto address=$config.identity.email encode='javascript' note='the operations team'}.
         </p>
     </div>
     <div class="clr"></div>

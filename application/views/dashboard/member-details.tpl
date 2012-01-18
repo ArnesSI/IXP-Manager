@@ -8,7 +8,7 @@
 
 <div id='ajaxMessage'></div>
 
-<h2>Details for INEX Member: {$cust.name}</h2>
+<h2>Details for {$config.identity.orgname} Member: {$cust.name}</h2>
 
 {literal}
 <style>
