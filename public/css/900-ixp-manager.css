@@ -967,3 +967,9 @@ h4 {
     color: #4FA500;
 }
 
+
+/* get rid of yui's left and right margins */
+#doc3
+{
+    margin: auto;
+}

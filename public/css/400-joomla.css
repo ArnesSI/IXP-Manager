@@ -444,7 +444,7 @@ div.menuwrapper {
     border-left: 1px solid #cccccc;
     padding: 0px;
 	margin: 0px;
-    width: 100%;
+    /* width: 100%;  not needed, or will strech to 100% + border width */
 }
 
 table.menubar {
