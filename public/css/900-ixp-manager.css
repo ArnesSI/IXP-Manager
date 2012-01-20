@@ -300,6 +300,7 @@ h4 {
         background-color: #FFF;
         background-position: right top;
         background: url(../images/joomla-admin/header_bg.png);
+        height: 38px;
 }
 
 #header {
@@ -312,7 +313,9 @@ h4 {
 #headertext {
     color: #FFFFFF;
     margin: 0px;
-    padding: 15px 4px 10px 10px;
+    padding-top: 7px;
+    padding-left: 4px;
+    padding-right: 10px;
     text-align: left;
     font-size: 1.5em;
 }
