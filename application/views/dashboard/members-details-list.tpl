@@ -23,7 +23,7 @@
 {foreach from=$memberDetails item=md}
 
         <tr>
-            <td><a href="{$md.corpwww}">{$md.name}</a></td>
+            <td><a {if $md.corpwww}href="{$md.corpwww}"{/if}>{$md.name}</a></td>
             <td><a href="mailto:{$md.peeringemail}">{$md.peeringemail}</a></td>
             <td>{$md.autsys|asnumber}</td>
             <td>{$md.nocphone}</td>

@@ -223,6 +223,21 @@ class CustomerController extends INEX_Controller_FrontEnd
     }
 
 
+    /**
+     * Before we save, check corpwww URL.
+     *
+     * @param unknown_type $customer The Customer object
+     * @param unknown_type $isEdit True if the customer is being edited, flase if it's being added
+     * @param unknown_type $form The submitted form object
+     */
+    protected function addEditPreSave( $customer, $isEdit, $form )
+    {
+        if ( substr( $customer['corpwww'], 0, 4 ) != 'http' )
+        {
+            $customer['corpwww'] = 'http://' . $customer['corpwww'];
+        }
+    }
+
 
     /**
      * A generic action to list the elements of a database (as represented

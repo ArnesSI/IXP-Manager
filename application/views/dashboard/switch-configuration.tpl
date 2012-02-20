@@ -54,7 +54,7 @@
 {foreach from=$swconf item=swc}
 
         <tr>
-            <td><a href="{$swc.corpwww}">{$swc.name}</a></td>
+            <td><a {if $swc.corpwww}href="{$swc.corpwww}"{/if}>{$swc.name}</a></td>
             <td>{$swc.ViewSwitchDetailsByCustid.switch}</td>
             <td>{$swc.ViewSwitchDetailsByCustid.switchport}</td>
             <td>{$swc.ViewSwitchDetailsByCustid.speed}Mbps</td>
