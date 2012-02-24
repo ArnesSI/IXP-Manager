@@ -209,7 +209,7 @@ class CustAdminController extends INEX_Controller_Action
 
                     if( !$isEdit )
                     {
-	                    $mail = new Zend_Mail();
+	                    $mail = new Zend_Mail( 'UTF-8' );
 	                    $mail->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] )
 	                         ->setSubject( 'Access details for ' . $this->config['identity']['ixp']['fullname'] )
 	                         ->setType( Zend_Mime::MULTIPART_RELATED )
