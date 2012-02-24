@@ -200,7 +200,7 @@ class UserController extends INEX_Controller_FrontEnd
             // we actually don't use the ID at all in the end!
             if( $this->getRequest()->getParam( 'to' ) !== NULL && $this->getRequest()->getParam( 'message' ) !== NULL && strlen( $this->getRequest()->getParam( 'message' ) ) > 5 ) {
                 try {
-                    $mail = new Zend_Mail( );
+                    $mail = new Zend_Mail( 'UTF-8' );
                     $mail->setBodyHtml( stripslashes( $this->getRequest()->getParam( 'message' ) ) )
                          ->setFrom( $options['identity']['email'], $options['identity']['name'] )
                          ->addTo( $this->getRequest()->getParam( 'to' ) )

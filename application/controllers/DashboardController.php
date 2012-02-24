@@ -839,7 +839,7 @@ class DashboardController extends INEX_Controller_Action
 
         if( $this->_request->getParam( 'send' ) == '1' )
         {
-            $mail = new Zend_Mail();
+            $mail = new Zend_Mail( 'UTF-8' );
             $mail->setFrom( $this->customer['peeringemail'], $this->customer['peeringemail'] . ' Peering Team' )
                  ->setSubject( stripslashes( $this->_request->getParam( 'subject' ) ) )
                  ->addTo( $bcust['peeringemail'], $bcust['name'] . ' Peering Team' )
@@ -1091,5 +1091,23 @@ class DashboardController extends INEX_Controller_Action
 
         $this->view->assign( 'events', $events );
         $this->view->display( 'dashboard/sec-event-email-config.tpl' );
+    }
+    
+    
+    public function weathermapAction()
+    {
+        // do we have a valid key
+        $key = $this->_getParam( 'id', null );
+        
+        if( $key === null || !isset( $this->config['weathermap'][$key] ) )
+        {
+            $this->session->message = new INEX_Message(
+            	'Unknown weathermap requested', INEX_Message::MESSAGE_TYPE_ERROR
+            );
+            $this->_redirect();
+        }
+        
+        $this->view->weathermap = $this->config['weathermap'][$key];
+        $this->view->display( 'dashboard/statistics-weathermap.tpl' );
     }
 }

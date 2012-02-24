@@ -224,7 +224,7 @@ class MeetingController extends INEX_Controller_FrontEnd
 
         if( $msg !== false )
         {
-            $mail = new Zend_Mail();
+            $mail = new Zend_Mail( 'UTF-8' );
             $mail->addTo( $this->config['meeting']['rsvp_to_email'], $this->config['meeting']['rsvp_to_name'] )
                  ->setSubject( '[Meeting RSVP] ' . $msg . ': ' . $this->getUser()->email . '/' . $this->customer['name'] )
                  ->setBodyText( "\nThis is an automated message from the IXP Manager.\n\n"
@@ -296,7 +296,7 @@ class MeetingController extends INEX_Controller_FrontEnd
 	                }
 	            }
 
-                $mail = new Zend_Mail();
+                $mail = new Zend_Mail( 'UTF-8' );
                 $mail->addTo( $to );
                 $mail->setFrom( $from );
                 if( $bcc != '' ) $mail->addBcc( $bcc );
