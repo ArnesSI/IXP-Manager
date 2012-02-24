@@ -839,7 +839,7 @@ class DashboardController extends INEX_Controller_Action
 
         if( $this->_request->getParam( 'send' ) == '1' )
         {
-            $mail = new Zend_Mail();
+            $mail = new Zend_Mail( 'UTF-8' );
             $mail->setFrom( $this->customer['peeringemail'], $this->customer['peeringemail'] . ' Peering Team' )
                  ->setSubject( stripslashes( $this->_request->getParam( 'subject' ) ) )
                  ->addTo( $bcust['peeringemail'], $bcust['name'] . ' Peering Team' )

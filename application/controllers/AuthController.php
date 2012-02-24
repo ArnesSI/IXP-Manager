@@ -140,7 +140,7 @@ class AuthController extends INEX_Controller_Action
                 
                 try 
                 {
-                    $mail = new Zend_Mail( );
+                    $mail = new Zend_Mail( 'UTF-8' );
                     $mail->setBodyText( $this->view->render( 'auth/email/password-reset.tpl' ) )
                         ->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] )
                          ->addTo( $user['email'] )
@@ -180,7 +180,7 @@ class AuthController extends INEX_Controller_Action
                 
                 try 
                 {
-                    $mail = new Zend_Mail( );
+                    $mail = new Zend_Mail( 'UTF-8' );
                     $mail->setBodyText( $this->view->render( 'auth/email/forgotten-username.tpl' ) )
                         ->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] )
                          ->addTo( $users[0]['email'] )
@@ -278,7 +278,7 @@ class AuthController extends INEX_Controller_Action
                 // send a confirmation email
                 try 
                 {
-                    $mail = new Zend_Mail( );
+                    $mail = new Zend_Mail( 'UTF-8' );
                     $mail->setBodyText( $this->view->render( 'auth/email/password-reset-notice.tpl' ) )
                         ->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] )
                          ->addTo( $user['email'] )
