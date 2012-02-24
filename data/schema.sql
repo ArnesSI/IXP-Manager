@@ -372,6 +372,30 @@ CREATE TABLE `physicalinterface_seq` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `provisioning_interface` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cust_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `virtualinterface_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `physicalinterface_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `vlaninterface_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `mail_sent` tinyint(4) NOT NULL DEFAULT '0',
+  `switch_config` tinyint(4) NOT NULL DEFAULT '0',
+  `quarantine_start` datetime DEFAULT NULL,
+  `quarantine_end` datetime DEFAULT NULL,
+  `complete` tinyint(4) NOT NULL DEFAULT '0',
+  `created_by` int(10) unsigned NOT NULL,
+  `created_at` datetime NOT NULL,
+  `completed_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cust_id_idx` (`cust_id`),
+  KEY `created_by_idx` (`created_by`),
+  KEY `virtualinterface_id_idx` (`virtualinterface_id`),
+  KEY `physicalinterface_id_idx` (`physicalinterface_id`),
+  KEY `vlaninterface_id_idx` (`vlaninterface_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sec_event` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `custid` int(10) unsigned NOT NULL,
