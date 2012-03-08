@@ -197,8 +197,8 @@ class DashboardController extends INEX_Controller_Action
     public function switchConfigurationAction()
     {
         $q = Doctrine_Query::create()
-            ->from( 'ViewCustCurrentActive vca' )
-            ->leftJoin( 'vca.ViewSwitchDetailsByCustid vsd' )
+            ->from( 'ViewSwitchDetailsByCustid vsd' )
+            ->leftJoin( 'vsd.ViewCustCurrentActive vca' )
             ->leftJoin( 'vsd.ViewVlaninterfaceDetailsByCustid vvid' )
             ->whereIn( 'vca.type', array( Cust::TYPE_FULL, Cust::TYPE_INTERNAL, Cust::TYPE_PROBONO ) )
             ->andWhere( 'vsd.status IS NOT NULL' )
