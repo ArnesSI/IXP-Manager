@@ -52,19 +52,17 @@
     </thead>
     <tbody>
 {foreach from=$swconf item=swc}
-
         <tr>
-            <td><a {if $swc.corpwww}href="{$swc.corpwww}"{/if}>{$swc.name}</a></td>
-            <td>{$swc.ViewSwitchDetailsByCustid.switch}</td>
-            <td>{$swc.ViewSwitchDetailsByCustid.switchport}</td>
-            <td>{$swc.ViewSwitchDetailsByCustid.speed}Mbps</td>
-            <td>{$swc.autsys|asnumber}</td>
-            <td>{if $swc.ViewSwitchDetailsByCustid.ViewVlaninterfaceDetailsByCustid.rsclient}Yes{else}No{/if}</td>
-            <td>{$swc.ViewSwitchDetailsByCustid.ViewVlaninterfaceDetailsByCustid.ipv4address}</td>
-            <td>{$swc.ViewSwitchDetailsByCustid.ViewVlaninterfaceDetailsByCustid.ipv6address}</td>
-            <td>{$swc.ViewSwitchDetailsByCustid->getPhysicalInterfaceStatusString()}</td>
+            <td><a {if $swc.ViewCustCurrentActive.corpwww}href="{$swc.ViewCustCurrentActive.corpwww}"{/if}>{$swc.ViewCustCurrentActive.name}</a></td>
+            <td>{$swc.switch}</td>
+            <td>{$swc.switchport}</td>
+            <td>{$swc.speed}Mbps</td>
+            <td>{$swc.ViewCustCurrentActive.autsys|asnumber}</td>
+            <td>{if $swc.ViewVlaninterfaceDetailsByCustid.rsclient}Yes{else}No{/if}</td>
+            <td>{$swc.ViewVlaninterfaceDetailsByCustid.ipv4address}</td>
+            <td>{$swc.ViewVlaninterfaceDetailsByCustid.ipv6address}</td>
+            <td>{$swc->getPhysicalInterfaceStatusString()}</td>
         </tr>
-
 {/foreach}
 
     </tbody>
