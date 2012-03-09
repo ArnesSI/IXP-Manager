@@ -94,6 +94,22 @@
                 </td>
             </tr>
 
+            <tr>
+                <td>
+                    <strong>RS IPv4 MD5 Secret</strong>
+                </td>
+                <td>
+                    <input type="text" readonly  class="boxed" value="{if $interface.ipv4bgpmd5secret}{$interface.ipv4bgpmd5secret}{else}[not used]{/if}" />
+                </td>
+                <td></td>
+                <td>
+                    <strong>RS IPv6 MD5 Secret</strong>
+                </td>
+                <td>
+                    <input type="text" readonly  class="boxed" value="{if $interface.ipv6bgpmd5secret}{$interface.ipv6bgpmd5secret}{else}[not used]{/if}" />
+                </td>
+            </tr>
+
             </table>
 
         </blockquote>
