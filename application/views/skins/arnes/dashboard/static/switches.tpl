@@ -34,7 +34,7 @@ shouldn't be seen there.
 
 <p>
 If you choose to connect your SIX port or ports to a switch, it is critically important to assign
-one unique vlan for each SIX connection. If you share an SIX facing VLAN between multiple SIX
+one unique VLAN for each SIX connection. If you share a SIX facing VLAN between multiple SIX
 ports or share a SIX-facing VLAN with any other network, your connection may automatically be shut
 down due to the security mechanisms implemented on SIX switches.
 </p>
@@ -44,13 +44,6 @@ It is also important to disable all switch-generated link-local traffic on your 
 Typical link-local traffic will include spanning tree BPDUs, keepalive packets and discovery
 protocols. This traffic is particulary problematic because these packets are typically forwarded
 on a port when the link is first brought up.
-</p>
-
-<p>
-If multiple mac addresses are seen on any particular port, one of two things will happen.
-Either the switch port will shut down for a cooling-down period of 5 minutes, or the equiment
-on the client-side of the switch port will have very poor quality connectivity, where arbitrary
-packets will appear to be dropped without any apparent reason.
 </p>
 
 <h2>Recommended Cisco Configuration</h2>

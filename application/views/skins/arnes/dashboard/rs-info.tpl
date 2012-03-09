@@ -107,7 +107,7 @@ As a rule of thumb: <strong>If you don't have any good reasons not to use the ro
 
 <p>
 The service is designed to be reliable. It operates on two physical servers, each located in a
-different data centre. The service is available on both ipv4 and ipv6. Each server runs a separate 
+different data centre. The service is available on both IPv4 and IPv6. Each server runs a separate 
 routing daemon per L3 protocol. Should a single BGP server die for some unlikely reason, no other BGP
 server is likely to be affected. If one of the physical servers becomes unavailable, the second server
 will continue to provide BGP connectivity.
@@ -146,7 +146,8 @@ In order to use the service, you should first instruct the route servers to crea
 </div>
 
 <p>
-If enabled, the route servers are set up to accept BGP connections from your router. Once this has
+If enabled, the route servers are set up to accept BGP connections from your router. Note that it 
+may take up to 24-hours for route servers to set up new peerings. Once this has
 been done, you will need to configure a BGP peering session to the correct internet address. The
 IP addresses of the route servers are listed as follows:
 </p>
@@ -163,7 +164,7 @@ IP addresses of the route servers are listed as follows:
     <tr>
         <th>&nbsp;</th>
         <th>IPv6 Address</th>
-        <td>2001:7f8:46::ffff</td>
+        <td>2001:7f8:46:0:1::1</td>
     </tr>
     <tr>
         <th>Route Server #2</th>
@@ -173,7 +174,7 @@ IP addresses of the route servers are listed as follows:
     <tr>
         <th>&nbsp;</th>
         <th>IPv6 Address</th>
-        <td>2001:7f8:46::ffff:ffff</td>
+        <td>2001:7f8:46::1</td>
     </tr>
 </tbody>
 </table>
@@ -217,7 +218,7 @@ outgoing prefix announcements to allow only the prefixes which you intend to ann
 
 <p>
 Note that the route server system depends on information in the RIPE IRR database. If you
-have not published correct <code>route:</code> and <code>route6:</code> objects in this database,
+have not published correct <code>as-set:</code>, <code>route:</code> and <code>route6:</code> objects in this database,
 your prefix announcements will be ignored by the route server and your peers will not route their
 traffic to you via the exchange.
 </p>
@@ -229,11 +230,12 @@ The SIX route server system also provides well known communities to allow member
 control the distribution of their prefixes. These communities are defined as follows:
 </p>
 
-<table class="ltbr2" cellspacing="0" border="0" width="500">
+<table class="ltbr2" cellspacing="0" border="0" width="600px">
     <thead>
     <tr>
         <th>Description</th>
         <th>Community</th>
+        <th>Extended Community</th>
     </tr>
     </thead>
 
@@ -241,18 +243,22 @@ control the distribution of their prefixes. These communities are defined as fol
     <tr>
         <td>Prevent announcement of a prefix to a peer</td>
         <td><code>0:peer-as</code></td>
+        <td><code>soo:0:peer-as</code></td>
     </tr>
     <tr>
         <td>Announce a route to a certain peer</td>
         <td><code>51988:peer-as</code></td>
+        <td><code>soo:51988:peer-as</code></td>
     </tr>
     <tr>
         <td>Prevent announcement of a prefix to all peers</td>
         <td><code>0:51988</code></td>
+        <td><code>soo:0:51988</code></td>
     </tr>
     <tr>
         <td>Announce a route to all peers</td>
         <td><code>51988:51988</code></td>
+        <td><code>soo:51988:peer-as</code></td>
     </tr>
     </tbody>
 </table>
@@ -268,6 +274,12 @@ and 51988:64222.
 <p>
 Alternatively, to announce a prefix to all SIX members, excluding AS64333, the prefix
 should be tagged with community 0:64333.
+</p>
+
+<p>
+To control anouncements to a peer with a 32-bit AS number use extended BGP communities.
+These communities are of type Route origin. On various router platforms also known as Site
+of origin, <code>soo</code>, <code>origin</code> or <code>ro</code>.
 </p>
 
 </div>
