@@ -25,7 +25,7 @@ SIX members have CLI access to the route-collector.
     <td width="50"></td>
     <td align="right"><strong>Server name:</strong></td>
     <td width="20"></td>
-    <td align="left"><code>route-collector.arnes.si</code></td>
+    <td align="left"><code>route-server-six.arnes.si</code></td>
 </tr>
 <tr>
     <td></td>
@@ -33,23 +33,13 @@ SIX members have CLI access to the route-collector.
     <td></td>
     <td align="left"><code>SSH</code></td>
 </tr>
-<tr>
-    <td></td>
-    <td align="right"><strong>Username:</strong></td>
-    <td></td>
-    <td align="left"><em>Your IXP Manager username</em></td>
-</tr>
-<tr>
-    <td></td>
-    <td align="right"><strong>Password:</strong></td>
-    <td></td>
-    <td align="left"><em>Your IXP Manager password</em></td>
-</tr>
 </table>
+<br />
 
 <p>
-Please note that all commands issued to the SIX route collector are logged
-for security purposes.
+Access to the route collector is possible using SSH public-key authentication. The username
+has been assigned to you when connecting to SIX. If you have trouble connecting to the route
+collector, please contact SIX techincal support at <a href="mailto:noc@six.si">noc@six.si</a>.
 </p>
 
 </div>

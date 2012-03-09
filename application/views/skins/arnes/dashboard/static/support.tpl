@@ -15,8 +15,11 @@
 <p>
 Regular technical support at SIX is provided on an office hours basis from 08:00 to 16:00 CET,
 Monday through Friday. The normal communications channel for technical support is email to
-<a href="mailto:hw-podpora@arnes.si">hw-podpora@arnes.si</a>. SIX operations staff are available by 
+<a href="mailto:noc@six.si">noc@six.si</a>. SIX operations staff are available by 
 telephone on +386 1 479 8800.
+</p>
+<p>
+A 24-hour advance notice is required to access SIX facilities during normal office hours.
 </p>
 
 <h3>Emergency 24x7x365 Support</h3>
@@ -40,7 +43,7 @@ only, including:
     <td width="20"></td>
     <td align="right"><strong>Email:</strong></td>
     <td width="10"></td>
-    <td align="left"><a href="mailto:hw-podpora@arnes.si">hw-podpora@arnes.si</a></td>
+    <td align="left"><a href="mailto:noc@six.si">noc@six.si</a></td>
 </tr>
 <tr>
     <td></td>
