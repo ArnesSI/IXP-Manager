@@ -11,7 +11,7 @@
 </table>
 
 <p>For the purposes of ensuring layer 2 stability, SIX implements 
-port security policies.</p>
+these port security policies:</p>
 
 <ul>
 
@@ -28,7 +28,7 @@ port security policies.</p>
         to all ports on a flat layer 2 LAN, this sort of traffic could
         potentially disrupt service for other connections into the SIX switch
         fabric. If inbound broadcast traffic exceeds the 1% threshold the port is
-        shut down and will be re-enabled after 600 seconds.
+        shut down and will be re-enabled after 10 minutes.
         <br />
         <br />
     </li>
@@ -41,10 +41,8 @@ port security policies.</p>
         <br />
         If frames are seen on a
         port with a source MAC address which differs from the dynamically
-        learned address, then the port will either shut the port down
-        automatically or else drop frames with the unknown MAC address. If the
-        port is shut down, it will automatically be re-enabled after 600
-        seconds (10 minutes).<br />
+        learned address, then the port is shut down and will be re-enabled after 
+        10 minutes.<br />
         <br />
         When multiple MAC addresses are seen on a particular
         port, it generally means one of the following things:
