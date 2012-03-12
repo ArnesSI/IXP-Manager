@@ -62,7 +62,7 @@
 <a href="{genUrl controller="dashboard" action="statistics" shortname=$cust.shortname monitorindex=aggregate category=$category}">
 	<img
 	    src="{genMrtgImgUrl shortname=$cust.shortname category=$category period=$period monitorindex='aggregate' mini=1 graphBackend=$graphBackend}"
-	    width="300"
+	    style="max-width:300px"
 	/>
 </a>
 
