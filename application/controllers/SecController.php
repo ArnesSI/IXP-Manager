@@ -137,7 +137,7 @@ class SecController extends Zend_Controller_Action
         if( $this->_config['sec']['bgp_auth']['alert_customers']
                 && $this->_session->user->getOrSetGetPreference( SecEvent::TYPE_BGP_AUTH, 1 ) )
         {
-            $mail = new Zend_Mail();
+            $mail = new Zend_Mail( 'UTF-8' );
             $mail->addTo( $this->_config['identity']['testemail'] /* $this->_session->cust['nocemail']*/, "NOC of {$this->_session->cust['name']}" );
             $mail->setSubject( '[' . $this->_config['identity']['orgname'] . ' Autobot] BGP MD5 Auth Issue with ' . $this->_config['identity']['orgname'] . ' Route Collector' );
             $this->_sendMail( $mail, 'sec/cust_bgp_auth.tpl', true, false, $this->_config['sec']['bgp_auth']['cc_opsauto'] );
@@ -147,7 +147,7 @@ class SecController extends Zend_Controller_Action
         {
             $this->_view->customer_notified = $this->_config['sec']['bgp_auth']['alert_customers'];
 
-            $mail = new Zend_Mail();
+            $mail = new Zend_Mail( 'UTF-8' );
 
             $mail->setSubject( "BGP Auth Issue with rc1 :: {$this->_session->cust['shortname']} :: "
                 . "{$this->_session->ip['address']}"
@@ -220,7 +220,7 @@ class SecController extends Zend_Controller_Action
             && !$this->_session->isCorePort
             && $this->_session->user->getOrSetGetPreference( SecEvent::TYPE_PORT_UPDOWN, 1 ) )
         {
-            $mail = new Zend_Mail();
+            $mail = new Zend_Mail( 'UTF-8' );
             $mail->addTo( $this->_config['identity']['testemail'] /* $this->_session->cust['nocemail']*/, "NOC of {$this->_session->cust['name']}" );
             $mail->setSubject( '[' . $this->_config['identity']['orgname'] . ' Autobot] ALERT: Your Port / Line Protocol is ' . strtoupper( $this->_session->state ) );
             $this->_sendMail( $mail, 'sec/cust_port_updown.tpl', true, false, $this->_config['sec']['security_violation']['cc_opsauto'] );
@@ -230,7 +230,7 @@ class SecController extends Zend_Controller_Action
         {
             $this->_view->customer_notified = $this->_config['sec']['port_updown']['alert_customers'];
 
-            $mail = new Zend_Mail();
+            $mail = new Zend_Mail( 'UTF-8' );
 
             if( $this->_session->isCorePort )
             {
@@ -316,7 +316,7 @@ class SecController extends Zend_Controller_Action
         if( $this->_config['sec']['security_violation']['alert_customers']
             && $this->_session->user->getOrSetGetPreference( SecEvent::TYPE_SECURITY_VIOLATION, 1 ) )
         {
-	        $mail = new Zend_Mail();
+	        $mail = new Zend_Mail( 'UTF-8' );
             $mail->addTo( $this->_config['identity']['testemail'] /* $this->_session->cust['nocemail']*/, "NOC of {$this->_session->cust['name']}" );
             $mail->setSubject( "[" . $this->_config['identity']['orgname'] . " Autobot] Port Security Violation" );
             $this->_sendMail( $mail, 'sec/cust_security_violation.tpl', true, false, $this->_config['sec']['security_violation']['cc_opsauto'] );
@@ -326,7 +326,7 @@ class SecController extends Zend_Controller_Action
         {
             $this->_view->customer_notified = $this->_config['sec']['security_violation']['alert_customers'];
 
-            $mail = new Zend_Mail();
+            $mail = new Zend_Mail( 'UTF-8' );
 
             $mail->setSubject( "Port Security Violation :: {$this->_session->cust['shortname']} :: "
                 . "{$this->_session->switch['name']} {$this->_session->switchPort['name']}"

@@ -332,6 +332,8 @@ END_JSON;
         {
             if( Zend_Validate::is( $user['email'], 'EmailAddress' ) )
                 $userEmails[] = $user['email'];
+            if( $user['privs'] == User::AUTH_CUSTADMIN )
+                $this->view->custAdmin = $user;
         }
 
         $form->getElement( 'cc' )->setValue( implode( ',', $userEmails ) );
@@ -387,7 +389,7 @@ END_JSON;
 
             if( $validForm )
             {
-                $mail = new Zend_Mail('UTF-8');
+                $mail = new Zend_Mail( 'UTF-8' );
                 $mail->setBodyText( $form->getValue( 'message' ) );
                 $mail->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] );
                 $mail->setSubject( $form->getValue( 'subject' ) );

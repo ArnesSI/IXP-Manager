@@ -291,7 +291,7 @@ class CliController extends INEX_Controller_Action
             ->andWhereIn( 'c.shortname', array( 'inex', 'routeservers' ), true )
             ->fetchArray();
 
-        $mail = new Zend_Mail();
+        $mail = new Zend_Mail( 'UTF-8' );
         $mail->setFrom( $this->config['cli']['traffic_differentials']['from_email'], $this->config['cli']['traffic_differentials']['from_name'] )
              ->setSubject( $this->config['cli']['traffic_differentials']['subject'] )
              ->setType( Zend_Mime::MULTIPART_RELATED );
@@ -436,7 +436,7 @@ class CliController extends INEX_Controller_Action
             ->andWhereIn( 'c.shortname', array( 'inex', 'routeservers' ), true )
             ->fetchArray();
 
-        $mail = new Zend_Mail();
+        $mail = new Zend_Mail( 'UTF-8' );
         $mail->setFrom( $this->config['cli']['port_utilisation']['from_email'], $this->config['cli']['traffic_differentials']['from_name'] )
              ->setSubject( $this->config['cli']['port_utilisation']['subject'] )
              ->setType( Zend_Mime::MULTIPART_RELATED );
