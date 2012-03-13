@@ -284,7 +284,7 @@ For the benefit of its members, INEX hosts an AS112 nameserver which answers bog
 Access to INEX Web Site Members Area
 ====================================
 
-INEX provides usernames and passwords to enable access to the members area of the INEX web site.  Your username is: "{$custdetails.shortname}".
+INEX provides usernames and passwords to enable access to the members area of the INEX web site.  Your username is: "{$custAdmin.username}".
 
 Please contact operations@inex.ie to securely obtain your password.  Our preferred communications medium for exchanging passwords is PGP email. However, if you do not support PGP, then SMS may also be used.
 
