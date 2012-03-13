@@ -208,7 +208,7 @@ By default, SIX actively monitors all ports on its peering LANs using ICMP PING 
 Access to SIX Web Site Members Area
 ====================================
 
-SIX provides usernames and passwords to enable access to the members area of the SIX web site.  Your username is: "".
+SIX provides usernames and passwords to enable access to the members area of the SIX web site.  Your username is: "{$custAdmin.username}".
 
 To obtain your password, please use the forgotten password procedure by visiting the following link and entering your username:
 

@@ -332,6 +332,8 @@ END_JSON;
         {
             if( Zend_Validate::is( $user['email'], 'EmailAddress' ) )
                 $userEmails[] = $user['email'];
+            if( $user['privs'] == User::AUTH_CUSTADMIN )
+                $this->view->custAdmin = $user;
         }
 
         $form->getElement( 'cc' )->setValue( implode( ',', $userEmails ) );
