@@ -66,7 +66,7 @@
 		        {$mi.title} &ndash;
 
 		        {if not $simple and $mi.email neq ''}
-		            {mailto address=$mi.email encode='javascript' text=$mi.name}
+		            {mailto address=$mi.email encode='none' text=$mi.name}
 		        {else}
 		            {$mi.name}
 		        {/if}

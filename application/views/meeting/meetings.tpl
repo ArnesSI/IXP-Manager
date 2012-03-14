@@ -15,7 +15,7 @@
 
     <select
         name="meetings_index"
-        onChange="window.location.href=meeting_jumpto.meetings_index.options[selectedIndex].value">
+        onChange="window.location.hash=meeting_jumpto.meetings_index.options[selectedIndex].value">
     >
 
         <option></option>
