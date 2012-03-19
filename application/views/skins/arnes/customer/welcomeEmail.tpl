@@ -49,15 +49,7 @@ Should you require your reverse DNS hostnames changed for either IPv4 or IPv6, p
 Route Servers
 =============
 
-SIX operates a Route Server cluster; this facility allows all members who connect to the cluster to see all routing prefixes sent to the cluster by any other member.  I.e. it provides an quick, safe and easy way to peer with any other route server user. 
-
-The SIX route server cluster is aimed at:
-
-o  small to medium sized members of the exchange who don't have the time or resources to aggressively manage their peering relationships.
-
-o  larger members of the exchange who have an open peering policy, but where it may not be worth their while managing peering relationships with smaller members of the exchange.
-
-If you don't have any good reasons not to use the route server cluster, you should probably use it.
+SIX operates a Route Server cluster; this facility allows all members who connect to the cluster to see all routing prefixes sent to the cluster by any other member.  I.e. it provides an quick, safe and easy way to peer with any other route server user. The SIX route server cluster can save time and resources to members because they don't have to manage their peering relationships.
 
 The service is designed to be reliable. It operates on two physical servers, each located in a different data centre. The service is available on both ipv4 and ipv6. The route servers also filter inbound routing prefixes based on published RIPE IRR policies, which means that using the route servers for peering is generally much safer than peering directly with other members. 
 
