@@ -57,7 +57,10 @@ The service is designed to be reliable. It operates on two physical servers, eac
 Your Input
 ----------
 
-If you wish to use the SIX route server system, please contact {$config.identity.email}
+If you wish to use the SIX route server system, please see:
+        {$config.identity.ixp.url}dashboard/rs-info
+
+For login details see below.
 
 
 Physical connections to SIX
