@@ -197,7 +197,7 @@
                         ]
                     ],
                 {/if}
-                [null,'Statistics','{genUrl controller="customer" action="statistics-overview"}',null,'Statistics',
+                [null,'Statistics',null,null,'Statistics',
                     ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />','Overall Peering Statistics',  '{genUrl controller="dashboard" action="traffic-stats"}',
                         null, 'Overall Peerings Statistics'   ],
                     ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Trunk Graphs',  '{genUrl controller="dashboard" action="trunk-graphs"}',
