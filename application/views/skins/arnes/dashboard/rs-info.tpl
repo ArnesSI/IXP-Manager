@@ -182,6 +182,9 @@ IP addresses of the route servers are listed as follows:
 </center>
 
 <p>
+<p>
+Please, set up peerings with both route servers!
+</p>
 <br /><br />
 For Cisco routers, you will need something like the following bgp configuration:
 </p>
@@ -195,7 +198,7 @@ For Cisco routers, you will need something like the following bgp configuration:
      neighbor 91.220.194.1 remote-as 51988
      neighbor 91.220.194.1 description SIX Route Server
      address-family ipv4
-      neighbor 91.220.194.1 password <your peering MD5 secret>
+      neighbor 91.220.194.1 password &lt;your peering MD5 secret (*)&gt;
       neighbor 91.220.194.1 activate
       neighbor 91.220.194.1 filter-list 100 out
      exit
@@ -205,14 +208,14 @@ For Cisco routers, you will need something like the following bgp configuration:
      neighbor 91.220.194.101 remote-as 51988
      neighbor 91.220.194.101 description SIX Route Server
      address-family ipv4
-      neighbor 91.220.194.101 password <your peering MD5 sercret>
+      neighbor 91.220.194.101 password &lt;your peering MD5 sercret (*)&gt;
       neighbor 91.220.194.101 activate
       neighbor 91.220.194.101 filter-list 100 out
      exit
 </pre>
 
 <p>
-You can see MD5 secrets for each of your peerings on the <strong>Ports</strong> tab of your
+(*) You can see MD5 secrets for each of your peerings on the <strong>Ports</strong> tab of your
 IXP-Manager <a href="{genUrl controller="dashboard"}">dashboard</a>.
 </p>
 
