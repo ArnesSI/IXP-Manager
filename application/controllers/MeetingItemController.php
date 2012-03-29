@@ -171,7 +171,7 @@ class MeetingItemController extends INEX_Controller_FrontEnd
             $this->_redirect( 'meeting/read' );
         }
 
-        $fn = "INEX_Members_Meeting_" . $pres['Meeting']['date'] . "_(" . $pres['id'] . ').';
+        $fn = "SIX_Members_Meeting_" . $pres['Meeting']['date'] . "_(" . $pres['id'] . ').';
 
         // What kind of file do we have?
         if( preg_match( '/pdf$/i', $pres['filename'] ) ) {
