@@ -260,11 +260,6 @@ control the distribution of their prefixes. These communities are defined as fol
         <td><code>0:51988</code></td>
         <td><code>soo:0:51988</code></td>
     </tr>
-    <tr>
-        <td>Announce a route to all peers</td>
-        <td><code>51988:51988</code></td>
-        <td><code>soo:51988:51988</code></td>
-    </tr>
     </tbody>
 </table>
 
