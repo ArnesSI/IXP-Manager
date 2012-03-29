@@ -195,7 +195,7 @@ For Cisco routers, you will need something like the following bgp configuration:
      neighbor 91.220.194.1 remote-as 51988
      neighbor 91.220.194.1 description SIX Route Server
      address-family ipv4
-      neighbor 91.220.194.1 password s00persekr1t
+      neighbor 91.220.194.1 password <your peering MD5 secret>
       neighbor 91.220.194.1 activate
       neighbor 91.220.194.1 filter-list 100 out
      exit
@@ -205,11 +205,16 @@ For Cisco routers, you will need something like the following bgp configuration:
      neighbor 91.220.194.101 remote-as 51988
      neighbor 91.220.194.101 description SIX Route Server
      address-family ipv4
-      neighbor 91.220.194.101 password s00persekr1t
+      neighbor 91.220.194.101 password <your peering MD5 sercret>
       neighbor 91.220.194.101 activate
       neighbor 91.220.194.101 filter-list 100 out
      exit
 </pre>
+
+<p>
+You can see MD5 secrets for each of your peerings on the <strong>Ports</strong> tab of your
+IXP-Manager <a href="{genUrl controller="dashboard"}">dashboard</a>.
+</p>
 
 <p>
 You should also use <code>route-maps</code> (or <code>distribute-lists</code>) to control
@@ -258,7 +263,7 @@ control the distribution of their prefixes. These communities are defined as fol
     <tr>
         <td>Announce a route to all peers</td>
         <td><code>51988:51988</code></td>
-        <td><code>soo:51988:peer-as</code></td>
+        <td><code>soo:51988:51988</code></td>
     </tr>
     </tbody>
 </table>
