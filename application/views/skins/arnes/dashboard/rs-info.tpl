@@ -182,6 +182,9 @@ IP addresses of the route servers are listed as follows:
 </center>
 
 <p>
+<p>
+Please, set up peerings with both route servers!
+</p>
 <br /><br />
 For Cisco routers, you will need something like the following bgp configuration:
 </p>
