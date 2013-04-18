@@ -53,6 +53,15 @@ SIX operates a Route Server cluster; this facility allows all members who connec
 
 The service is designed to be reliable. It operates on two physical servers, each located in a different data centre. The service is available on both ipv4 and ipv6. The route servers also filter inbound routing prefixes based on published RIPE IRR policies, which means that using the route servers for peering is generally much safer than peering directly with other members. 
 
+- Route Server #1
+    IPv4 Address    91.220.194.1
+    IPv6 Address    2001:7f8:46:0:1::1
+- Route Server #2
+    IPv4 Address    91.220.194.101
+    IPv6 Address    2001:7f8:46::1
+
+Route Server ASN is 51988.
+You will need MD5 secrets to to configure BGP peerings with route servers. They are available in IXP Manager portal.
 
 Your Input
 ----------
@@ -66,7 +75,7 @@ For login details see below.
 Physical connections to SIX
 ===========================
 
-1. Prefered solution - router of SIX member is not located at the location of SIX:
+1. Prefered solution - router of SIX member is not located at the SIX location:
 
 o The connection between SIX and the location of the member's router connecting to SIX has to be based on fibre. To assure quality of the link only Ethernet converters, Ethernet over CWDM/DWDM and Ethernet over SDH or OTN without statistical multiplexing are allowed.
 o Exceptionally Ethernet switches can also be used on the connection between SIX and the router, provided they are owned and managed by the member connecting to SIX. Due to added complexity usage of Ethernet switches should be avoided whenever possible.
@@ -74,7 +83,7 @@ o Only passive optical equipment and Ethernet optical converters may be installe
 
 2. Additional solution - router of SIX member is located at the SIX data center:
 
-o Limited housing space of total 3 rack units (RU), - no shelfs,included - is available per member at each SIX location.
+o Limited housing space of total 3 rack units (RU), - no shelfs included - is available per member at each SIX location.
 o Members' router must be suitable for installation in a 19" rack
 o Members have to arrange delivery and installation of their equipment in the SIX premises by prior agreement with Arnes.
 
@@ -106,7 +115,8 @@ SIX Operations
 
 Technical Operations for SIX are provided by Arnes. Technical support contact details for SIX can be found at:
 
-        http://www.arnes.si/en/infrastructure/six-internet-exchange/contact.html
+        http://www.arnes.si/six-sticisce-omrezij/kontakt.html (in Slovene)
+        http://www.arnes.si/en/infrastructure/six-internet-exchange/contact.html (in English)
 
 In general, the best way to contact SIX operations is by email at: {$config.identity.email}. If there is an emergency requiring immediate assistance, please contact the on call engineer via the mobile number: +386 41 793 060.
 
@@ -171,7 +181,8 @@ If you intend to use IPv6 with a Cisco IOS based router, please also consider th
 
 For further details please see the following URL:
 
-        http://www.arnes.si/en/infrastructure/six-internet-exchange/technical-and-administrative-requirements.html
+        http://www.arnes.si/six-sticisce-omrezij/pogoji-clanstva.html (in Slovene)
+        http://www.arnes.si/en/infrastructure/six-internet-exchange/technical-and-administrative-requirements.html (in English)
 
 
 Connecting Switches to SIX
@@ -220,7 +231,7 @@ More and more organisations are using PeeringDB to make decisions on where they 
 We would very much appreciate it if you could mark your new SIX peering under the "Public Peering Locations" section of your PeeringDB page. We are listed as 'SIX SI'. If you do not yet have a PeeringDB account, we would suggest that you register for one on their site.
 
 
-Welcome to SIX, Slovenian Internet Exchange.
+Welcome to SIX, Slovenian Internet eXchange.
 
 
 SIX Operations
