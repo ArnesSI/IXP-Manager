@@ -229,7 +229,7 @@ class Vlan extends EntityRepository
 
                     WHERE
 
-                        v.number IN ( 10, 12 )
+                        v.number IN ( 50 )
 
                 ORDER BY v.number ASC"
             )
