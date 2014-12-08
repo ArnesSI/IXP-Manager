@@ -70,7 +70,7 @@ my $qbridge_support = 1;
 my $vlan;
 my $debug_output;
 
-my ($query, $sth, $l2mapping);
+my ($query, $sth, $l2mapping, $ifindex);
 
 GetOptions(
 	'debug!'		=> \$debug,
@@ -86,7 +86,10 @@ $sth->execute(SWITCHTYPE_SWITCH) or die "$dbh->errstr\n";
 my $switches = $sth->fetchall_hashref('name');
 
 foreach my $switch (keys %{$switches}) {
-	$l2mapping->{$switch} = trawl_switch_snmp($switches->{$switch}, $vlan);
+	my $snmp_data = trawl_switch_snmp($switches->{$switch}, $vlan);
+	next if not $snmp_data;
+	$l2mapping->{$switch} = $snmp_data->{macaddr};
+	$ifindex->{$switch} = $snmp_data->{ifindex};
 }
 
 if ($debug) {
@@ -94,13 +97,32 @@ if ($debug) {
 	print STDERR $debug_output;
 }
 
-$query = "SELECT id, switchport, switchportid, spifname, switch, status, infrastructure FROM view_switch_details_by_custid";
+$query = "SELECT v.id, v.switchport, v.switchportid, v.spifname, v.switch, v.status, v.infrastructure, s.lagifindex FROM view_switch_details_by_custid v LEFT JOIN switchport s ON s.id=v.switchportid";
 ($sth = $dbh->prepare($query)) or die "$dbh->errstr\n";
 $sth->execute() or die "$dbh->errstr\n";
 my $ports = $sth->fetchall_hashref( [qw (switch switchport)] );
 
 if ($debug) {
 	($debug_output = Dumper($ports)) =~ s/^\$VAR[0-9]+ = /\$ports = /;
+	print STDERR $debug_output;
+}
+
+# remap macs on virtual LAG interfaces into their respective physical interfaces
+foreach my $switch (keys $ports) {
+	foreach my $port (keys %{$ports->{$switch}}) {
+		my $lagifindex = $ports->{$switch}->{$port}->{lagifindex};
+		next if not $lagifindex;
+		if (defined $ifindex->{$switch}->{$lagifindex}) {
+			my $lagifname = $ifindex->{$switch}->{$lagifindex};
+			next if not defined $l2mapping->{$switch}->{$lagifname};
+			my $lagmacs = $l2mapping->{$switch}->{$lagifname};
+			$l2mapping->{$switch}->{$port} = $lagmacs;
+		}
+	}
+}
+
+if ($debug) {
+	($debug_output = Dumper($l2mapping)) =~ s/^\$VAR[0-9]+ = /\$l2mapping LAG = /;
 	print STDERR $debug_output;
 }
 
@@ -302,7 +324,7 @@ sub trawl_switch_snmp ($$) {
 		}
 	}
 
-	return $macaddr;
+	return {macaddr => $macaddr, ifindex => $ifindex};
 }
 
 sub snmpwalk2hash {
