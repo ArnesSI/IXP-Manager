@@ -116,7 +116,7 @@ To encourage co-operation between {$options.identity.orgname} members, {$options
 Your Input
 ----------
 
-Please contact SIX operations ({$config.identity.email}) with an email address you wish to subscribe to the mailing list. This is usually a mailing list itself, such as noc@<your_domain>. Please let us know of any other From addresses you will be sending from as well.
+Please contact SIX operations ({$options.identity.email}) with an email address you wish to subscribe to the mailing list. This is usually a mailing list itself, such as noc@<your_domain>. Please let us know of any other From addresses you will be sending from as well.
 
 ----------
 
@@ -128,7 +128,7 @@ Technical Operations for SIX are provided by Arnes. Technical support contact de
 
         {genUrl controller="static" action="support"}
 
-In general, the best way to contact SIX operations is by email at: {$config.identity.email}.  If there is an emergency requiring immediate assistance, please contact the on call engineer via the mobile number: +386 41 793 060.
+In general, the best way to contact SIX operations is by email at: {$options.identity.email}.  If there is an emergency requiring immediate assistance, please contact the on call engineer via the mobile number: +386 41 793 060.
 
 
 Peering
@@ -220,7 +220,7 @@ For further details please see the following URL:
 Monitoring
 ==========
 
-By default, SIX actively monitors all ports on its peering LANs using ICMP PING for both connectivity and host latency.  This monitoring causes about 25 PING packets to be sent to each IP address on the peering LAN every 5 minutes.  If you do not wish for your router to be actively monitored, please mail {$config.identity.email} and we can disable this facility.
+By default, SIX actively monitors all ports on its peering LANs using ICMP PING for both connectivity and host latency.  This monitoring causes about 25 PING packets to be sent to each IP address on the peering LAN every 5 minutes.  If you do not wish for your router to be actively monitored, please mail {$options.identity.email} and we can disable this facility.
 
 
 PeeringDB
