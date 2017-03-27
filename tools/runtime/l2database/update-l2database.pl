@@ -97,7 +97,7 @@ if ($debug) {
 	print STDERR $debug_output;
 }
 
-$query = "SELECT v.id, v.switchport, v.switchportid, v.spifname, v.switch, v.status, v.infrastructure, s.lagifindex FROM view_switch_details_by_custid v LEFT JOIN switchport s ON s.id=v.switchportid";
+$query = "SELECT id, switchport, switchportid, spifname, switch, status, infrastructure, virtualinterfacename FROM view_switch_details_by_custid";
 ($sth = $dbh->prepare($query)) or die "$dbh->errstr\n";
 $sth->execute() or die "$dbh->errstr\n";
 my $ports = $sth->fetchall_hashref( [qw (switch switchport)] );
@@ -141,6 +141,13 @@ foreach my $switch (keys %{$ports}) {
 			$do_nothing or $insertsth->execute($ports->{$switch}->{$port}->{id}, $mac) or die "$dbh->errstr\n";
 #			$ports->{$switch}->{$port}->{mac} = $l2mapping->{$switch}->{$port};
 		}
+                if ($ports->{$switch}->{$port}->{'virtualinterfacename'} ne "") {
+                        my $virtualinterfacename = $ports->{$switch}->{$port}->{'virtualinterfacename'};
+                        foreach my $mac (@{$l2mapping->{$switch}->{$virtualinterfacename}}) {
+                                $debug && print STDERR "INSERT: $mac -> $switch:$virtualinterfacename\n";
+                                $do_nothing or $insertsth->execute($ports->{$switch}->{$port}->{id}, $mac) or die "$dbh->errstr\n";
+                        }
+                }
 	}
 }
 
