@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2009-2014 Internet Neutral Exchange Association Limited.
+ * Copyright (C) 2009-2016 Internet Neutral Exchange Association Company Limited By Guarantee.
  * All Rights Reserved.
  *
  * This file is part of IXP Manager.
@@ -28,7 +28,7 @@
  * @author     Nick Hilliard <nick@foobar.org>
  * @category   IXP
  * @package    IXP_Controller
- * @copyright  Copyright (c) 2009 - 2014, Internet Neutral Exchange Association Ltd
+ * @copyright  Copyright (C) 2009-2016 Internet Neutral Exchange Association Company Limited By Guarantee
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU GPL V2.0
  */
 class Apiv1_MemberListController extends IXP_Controller_API_V1Action
@@ -55,7 +55,7 @@ class Apiv1_MemberListController extends IXP_Controller_API_V1Action
 
         $jsonoutput['member_list'] = $this->getListMemberInfo();
 
-        print json_encode($jsonoutput, JSON_PRETTY_PRINT)."\n";
+        print json_encode($jsonoutput, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n";
     }
 
     private function preflight() {

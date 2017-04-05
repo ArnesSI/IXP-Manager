@@ -1,4 +1,4 @@
-; Copyright (C) 2009-2012 Internet Neutral Exchange Association Limited.
+; Copyright (C) 2009-2016 Internet Neutral Exchange Association Company Limited By Guarantee.
 ; All Rights Reserved.
 ;
 ; This file is part of IXP Manager.
@@ -104,6 +104,15 @@ reseller.enabled = true
 ;; can not add/change resold customers details.
 ;;
 reseller.no_billing_for_resold_customers = true
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Specifies whether to display and enable control of AS112 functionality for customers
+;;
+;; See https://github.com/inex/IXP-Manager/wiki/AS112
+;;
+
+as112_ui_active = true
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -221,10 +230,18 @@ resources.doctrine2.connection.options.charset  = 'utf8mb4'
 ;;
 
 ondemand_resources.logger.enabled = 1
-ondemand_resources.logger.writers.email.from   = ixp-logger@example.com
-ondemand_resources.logger.writers.email.to     = ixp-notify-list@example.com
-ondemand_resources.logger.writers.email.prefix = 'IXP_ERROR'
-ondemand_resources.logger.writers.email.level  = 3
+
+;; Email alerts of exceptions can be particular useful for giving you a heads
+;; up of any issues rather than waiting for a customer to contact you.
+;;
+;; However, if your email system is out of band (i.e. not internal to your
+;; own network), beware that full exception details and traces are included
+;; and in some cases can leak sensitive information.
+;ondemand_resources.logger.writers.email.from   = ixp-logger@example.com
+;ondemand_resources.logger.writers.email.to     = ixp-notify-list@example.com
+;ondemand_resources.logger.writers.email.prefix = 'IXP_ERROR'
+;ondemand_resources.logger.writers.email.level  = 3
+
 ondemand_resources.logger.writers.stream.level = 7
 ondemand_resources.logger.writers.stream.path  = APPLICATION_PATH "/../var/log"
 ;; For FreeBSD, use "www" below
@@ -301,7 +318,7 @@ frontend.disabled.rs-prefixes = 1
 ;; e.g. we use "INEX" here
 identity.orgname  = "XXX"
 
-;; e.g. we use "Internet Neutral Exchange Association Ltd" here
+;; e.g. we use "Internet Neutral Exchange Association Company Limited By Guarantee" here
 identity.legalname  = "XXX"
 
 ;; e.g. we use "Dublin"

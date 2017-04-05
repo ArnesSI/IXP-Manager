@@ -2,7 +2,7 @@ password: {$options.rir.ripe_password}
 
 aut-num:        AS43760
 as-name:        INEX-RS
-descr:          Internet Neutral Exchange Association Limited
+descr:          Internet Neutral Exchange Association Company Limited By Guarantee
 remarks:        -------------------------------------------------------
 remarks:
 remarks:        INEX Route Server Routing Policy:
@@ -27,13 +27,12 @@ remarks:          applies to IPv6 prefixes.
 remarks:        - community 43760:43760 is really just a NOP
 remarks:
 remarks:        -------------------------------------------------------
-org:            ORG-INEX1-RIPE
+org:            ORG-INEA1-RIPE
 admin-c:        INO7-RIPE
 tech-c:         INO7-RIPE
 mnt-by:         RIPE-NCC-END-MNT
 mnt-by:         INEX-NOC
 mnt-routes:     INEX-NOC
-changed:        ripe-admin@inex.ie
 
 {foreach $rsclients.clients as $asn => $cdetails}
     {$cust = $customers[$cdetails.id]}
@@ -45,8 +44,8 @@ changed:        ripe-admin@inex.ie
 	            {/if}
 	            {foreach $rsclients.vlans.$vlanid.servers.$proto as $serverip}
 	                {if $proto eq 4}
-	
-import:         from AS{$cust->getAutsys()} {$interface.$proto} at {$serverip} 
+
+import:         from AS{$cust->getAutsys()} {$interface.$proto} at {$serverip}
                 accept {$cust->resolveAsMacro( $proto, 'AS' )}  # {$cust->getName()}
 export:         to AS{$cust->getAutsys()} {$interface.$proto} at {$serverip}
                 announce AS-SET-INEX-RS

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2009-2013 Internet Neutral Exchange Association Limited.
+ * Copyright (C) 2009-2016 Internet Neutral Exchange Association Company Limited By Guarantee.
  * All Rights Reserved.
  *
  * This file is part of IXP Manager.
@@ -28,7 +28,7 @@
  * @author     Barry O'Donovan <barry@opensolutions.ie>
  * @category   IXP
  * @package    IXP_Controller
- * @copyright  Copyright (c) 2009 - 2013, Internet Neutral Exchange Association Ltd
+ * @copyright  Copyright (C) 2009-2016 Internet Neutral Exchange Association Company Limited By Guarantee
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU GPL V2.0
  */
 class StatisticsController extends IXP_Controller_AuthRequiredAction
@@ -44,7 +44,7 @@ class StatisticsController extends IXP_Controller_AuthRequiredAction
         $this->setIXP();
         $this->setInfrastructure();
 
-        $this->view->custs = $custs = $this->getD2R( '\\Entities\\Customer')->getCurrentActive( false, true, false, $this->ixp );
+        $this->view->custs = $custs = $this->getD2R( '\\Entities\\Customer')->getConnected( false, false, $this->ixp );
 
         if( !is_string( $this->infra ) && $this->infra )
             $this->view->custs = $this->getD2R( '\\Entities\\Customer')->filterForInfrastructure( $custs, $this->infra );
@@ -336,7 +336,7 @@ class StatisticsController extends IXP_Controller_AuthRequiredAction
         $cust = $this->view->cust = $this->resolveCustomerByShortnameParam(); // includes security checks
 
         $this->setIXP( $cust );
-        $category = $this->setCategory( 'category', false );
+        $category = $this->setCategory( 'category', true );
         $period   = $this->setPeriod();
         $proto    = $this->setProtocol();
 

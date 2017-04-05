@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2009-2012 Internet Neutral Exchange Association Limited.
+ * Copyright (C) 2009-2016 Internet Neutral Exchange Association Company Limited By Guarantee.
  * All Rights Reserved.
  *
  * This file is part of IXP Manager.
@@ -88,8 +88,9 @@ class IXP_Controller_Action extends OSS_Controller_Action
         $this->view->registerClass( 'SWITCHPORT', '\\Entities\\SwitchPort' );
         $this->view->registerClass( 'VLAN',       '\\Entities\\Vlan' );
         
-        $this->view->resellerMode = $this->resellerMode();
-        $this->view->multiIXP     = $this->multiIXP();
+        $this->view->resellerMode  = $this->resellerMode();
+        $this->view->multiIXP      = $this->multiIXP();
+        $this->view->as112UiActive = $this->as112UiActive();
         
         if( $this->getAuth()->hasIdentity() && $this->getUser()->getPrivs() == Entities\User::AUTH_SUPERUSER )
             $this->superUserSetup();

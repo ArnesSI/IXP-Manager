@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Copyright (C) 2009-2011 Internet Neutral Exchange Association Limited.
+# Copyright (C) 2009-2016 Internet Neutral Exchange Association Company Limited By Guarantee.
 # All Rights Reserved.
 # 
 # This file is part of IXP Manager.
@@ -201,7 +201,7 @@ $vars->{ixp_rs_asn} = $ixpconfig->{ixp}->{rs_asn};
 $vars->{ixp_rs_afilist} = ['ipv4', 'ipv6', 'vpnv4'];
 
 my %hash = %{$vars->{entries}};
-@{$vars->{sortedkeys}} = reverse sort { $hash{$b}->{autsys} <=> $hash{$a}->{autsys} } keys %hash;
+@{$vars->{sortedkeys}} = reverse sort { $hash{$b}->{autsys} <=> $hash{$a}->{autsys} } sort keys %hash;
 
 if ($routeserver) {
 	if ($protocol && $vlan) {
