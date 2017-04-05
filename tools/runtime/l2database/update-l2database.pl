@@ -70,7 +70,7 @@ my $qbridge_support = 1;
 my $vlan;
 my $debug_output;
 
-my ($query, $sth, $l2mapping, $ifindex);
+my ($query, $sth, $l2mapping);
 
 GetOptions(
 	'debug!'		=> \$debug,
@@ -79,17 +79,14 @@ GetOptions(
 	'vlan=i'		=> \$vlan,
 );
 
-$query = "SELECT s.name, s.snmppasswd, v.name AS vendor FROM switch s LEFT JOIN vendor v ON v.id = s.vendorid WHERE active AND switchtype = ?";
+$query = "SELECT name, snmppasswd FROM switch WHERE active AND switchtype = ?";
 
 ($sth = $dbh->prepare($query)) or die "$dbh->errstr\n";
 $sth->execute(SWITCHTYPE_SWITCH) or die "$dbh->errstr\n";
 my $switches = $sth->fetchall_hashref('name');
 
 foreach my $switch (keys %{$switches}) {
-	my $snmp_data = trawl_switch_snmp($switches->{$switch}, $vlan);
-	next if not $snmp_data;
-	$l2mapping->{$switch} = $snmp_data->{macaddr};
-	$ifindex->{$switch} = $snmp_data->{ifindex};
+	$l2mapping->{$switch} = trawl_switch_snmp($switch, $switches->{$switch}->{snmppasswd}, $vlan);
 }
 
 if ($debug) {
@@ -104,25 +101,6 @@ my $ports = $sth->fetchall_hashref( [qw (switch switchport)] );
 
 if ($debug) {
 	($debug_output = Dumper($ports)) =~ s/^\$VAR[0-9]+ = /\$ports = /;
-	print STDERR $debug_output;
-}
-
-# remap macs on virtual LAG interfaces into their respective physical interfaces
-foreach my $switch (keys $ports) {
-	foreach my $port (keys %{$ports->{$switch}}) {
-		my $lagifindex = $ports->{$switch}->{$port}->{lagifindex};
-		next if not $lagifindex;
-		if (defined $ifindex->{$switch}->{$lagifindex}) {
-			my $lagifname = $ifindex->{$switch}->{$lagifindex};
-			next if not defined $l2mapping->{$switch}->{$lagifname};
-			my $lagmacs = $l2mapping->{$switch}->{$lagifname};
-			$l2mapping->{$switch}->{$port} = $lagmacs;
-		}
-	}
-}
-
-if ($debug) {
-	($debug_output = Dumper($l2mapping)) =~ s/^\$VAR[0-9]+ = /\$l2mapping LAG = /;
 	print STDERR $debug_output;
 }
 
@@ -200,12 +178,10 @@ sub oid2mac {
 }
 
 sub trawl_switch_snmp ($$) {
-	my ($host_info, $vlan) = @_;
-	my $host = $host_info->{name};
-	my $snmpcommunity = $host_info->{snmppasswd};
-	my $vendor = $host_info->{vendor};
+	my ($host, $snmpcommunity, $vlan) = @_;
 	my ($dbridgehash, $qbridgehash, $macaddr, $junipermapping, $vlanmapping);
 	my $oids = {
+		'sysDescr'		=> '.1.3.6.1.2.1.1.1',
 		'ifDescr'		=> '.1.3.6.1.2.1.2.2.1.2',
 		'dot1dBasePortIfIndex'	=> '.1.3.6.1.2.1.17.1.4.1.2',
 		'dot1qVlanFdbId'	=> '.1.3.6.1.2.1.17.7.1.4.2.1.3',
@@ -214,19 +190,26 @@ sub trawl_switch_snmp ($$) {
 		'dot1dTpFdbAddress'	=> '.1.3.6.1.2.1.17.4.3.1.1',
 		'jnxExVlanTag'		=> '.1.3.6.1.4.1.2636.3.40.1.5.1.5.1.5',
 	};
-	my $snmpcommunitybridge = $snmpcommunity;
-	# Cisco wants us to query BRIGE-MIB OIDs with community@vlan.
-	if ($vendor =~ /^cisco/i) {
-		$snmpcommunitybridge = "$snmpcommunity\@$vlan";
-	}
+
 	$debug && print STDERR "DEBUG: $host: started query process\n";
+
+	my $sysdescr = snmpwalk2hash($host, $snmpcommunity, $oids->{sysDescr});
+
+	if ($sysdescr->{'0'} =~ /Cisco\s+(NX-OS|IOS)/) {
+		if (!defined ($vlan) || $vlan == 0) {
+			print STDERR "ERROR: $host: must specify VLAN for Cisco IOS/NX-OS switches\n";
+			return;
+		}
+		$debug && print STDERR "WARNING: $host: using community\@vlan hack to handle broken SNMP implementation\n";
+		$snmpcommunity .= '@'.$vlan;
+	}
 
 	my $ifindex = snmpwalk2hash($host, $snmpcommunity, $oids->{ifDescr});
 	if (!$ifindex) {
 		print STDERR "WARNING: $host: cannot read ifDescr. Not processing $host further.\n";
 		return;
 	}
-	my $interfaces = snmpwalk2hash($host, $snmpcommunitybridge, $oids->{dot1dBasePortIfIndex});
+	my $interfaces = snmpwalk2hash($host, $snmpcommunity, $oids->{dot1dBasePortIfIndex});
 	if (!$interfaces) {
 		print STDERR "WARNING: $host: cannot read dot1dBasePortIfIndex. Not processing $host further.\n";
 		return;
@@ -297,7 +280,7 @@ sub trawl_switch_snmp ($$) {
 	# Q-BRIDGE mib, then use rfc1493 BRIDGE-MIB.
 	if (($vlan && !$qbridgehash) || (!$vlan && !$junipermapping)) {
 		$debug && print STDERR "DEBUG: $host: attempting BRIDGE-MIB ($oids->{dot1dTpFdbPort})\n";
-		$dbridgehash = snmpwalk2hash($host, $snmpcommunitybridge, $oids->{dot1dTpFdbPort});
+		$dbridgehash = snmpwalk2hash($host, $snmpcommunity, $oids->{dot1dTpFdbPort});
 		$dbridgehash && $debug && print STDERR "DEBUG: $host: BRIDGE-MIB query successful\n";
 	}
 
@@ -310,7 +293,7 @@ sub trawl_switch_snmp ($$) {
 
 	my ($bridgehash, $maptable, $bridgehash2mac);
 	if ($dbridgehash) {
-		$bridgehash2mac = snmpwalk2hash($host, $snmpcommunitybridge, $oids->{dot1dTpFdbAddress}, undef, \&normalize_mac);
+		$bridgehash2mac = snmpwalk2hash($host, $snmpcommunity, $oids->{dot1dTpFdbAddress}, undef, \&normalize_mac);
 		$bridgehash = $dbridgehash;
 		$maptable = $bridgehash2mac;
 	} else {
@@ -331,7 +314,7 @@ sub trawl_switch_snmp ($$) {
 		}
 	}
 
-	return {macaddr => $macaddr, ifindex => $ifindex};
+	return $macaddr;
 }
 
 sub snmpwalk2hash {
